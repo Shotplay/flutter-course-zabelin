@@ -18,6 +18,7 @@
       let
         createPkgs = pkgs: import pkgs {
           inherit system;
+          config.allowUnfree = true;
         };
 
         pkgs = createPkgs nixpkgs;
@@ -27,6 +28,7 @@
         devShells.default = pkgs.mkShell {
           packages = with pkgs-unstable; [
             flutter
+            android-studio
           ];
         };
       }
