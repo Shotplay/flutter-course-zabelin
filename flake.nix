@@ -28,7 +28,6 @@
         devShells.default = pkgs.mkShell {
           packages = with pkgs-unstable; [
             flutter
-            android-studio
           ];
         };
       }
