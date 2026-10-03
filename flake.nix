@@ -18,6 +18,7 @@
       let
         createPkgs = pkgs: import pkgs {
           inherit system;
+          config.allowUnfree = true;
         };
 
         pkgs = createPkgs nixpkgs;
