@@ -159,6 +159,7 @@ class MyApp extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             bookPreview(imgSrc, favorite),
+            const SizedBox(width: 12),
             bookInfo(name, author, year, genres),
           ],
         ),
@@ -218,28 +219,22 @@ class MyApp extends StatelessWidget {
   }
 
   Widget bookPreview(String src, bool favorite) {
-    return SizedBox(
-      width: 88,
-      height: 120,
-      child: Stack(
-        children: [
-          Container(
-            clipBehavior: Clip.antiAlias,
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(15),
-              boxShadow: const [
-                BoxShadow(
-                  color: Colors.black,
-                  spreadRadius: 0.4,
-                  blurRadius: 1,
-                ),
-              ],
-            ),
-            child: Image.asset(src, fit: BoxFit.cover),
+    return Stack(
+      children: [
+        Container(
+          width: 88,
+          height: 120,
+          clipBehavior: Clip.antiAlias,
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(15),
+            boxShadow: const [
+              BoxShadow(color: Colors.black, spreadRadius: 0.4, blurRadius: 1),
+            ],
           ),
-          bookFavorite(favorite),
-        ],
-      ),
+          child: Image.asset(src, fit: BoxFit.cover),
+        ),
+        bookFavorite(favorite),
+      ],
     );
   }
 
