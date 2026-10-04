@@ -208,7 +208,10 @@ class MyApp extends StatelessWidget {
             style: TextStyle(fontWeight: FontWeight.w400, fontSize: 13),
           ),
           const SizedBox(height: 6),
-          Row(spacing: 9, children: genres),
+          SingleChildScrollView(
+            scrollDirection: Axis.horizontal,
+            child: Row(spacing: 9, children: genres),
+          ),
         ],
       ),
     );
