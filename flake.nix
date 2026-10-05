@@ -16,20 +16,25 @@
     flake-utils.lib.eachDefaultSystem (
       system:
       let
-        createPkgs = pkgs: import pkgs {
-          inherit system;
-          config.allowUnfree = true;
-        };
+        createPkgs =
+          pkgs:
+          import pkgs {
+            inherit system;
+            config = {
+              allowUnfree = true;
+            };
+          };
 
         pkgs = createPkgs nixpkgs;
         pkgs-unstable = createPkgs nixpkgs-unstable;
       in
       {
         devShells.default = pkgs.mkShell {
-          packages = with pkgs-unstable; [
-            flutter
-            android-tools
-          ];
+          packages =
+            (with pkgs-unstable; [
+              flutter
+            ])
+            ++ (with pkgs; [ android-studio ]);
         };
       }
     );
