@@ -30,11 +30,9 @@
       in
       {
         devShells.default = pkgs.mkShell {
-          packages =
-            (with pkgs-unstable; [
+          packages = with pkgs-unstable; [
               flutter
-            ])
-            ++ (with pkgs; [ android-studio ]);
+          ];
         };
       }
     );
