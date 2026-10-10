@@ -13,7 +13,7 @@ class BookInfo extends StatelessWidget {
       child: Column(
         spacing: 2,
         crossAxisAlignment: CrossAxisAlignment.start,
-        children: [_name(), _author(), _genres()],
+        children: [_name(), _author(), _genres(), _description()],
       ),
     );
   }
@@ -31,6 +31,15 @@ class BookInfo extends StatelessWidget {
     return Text(
       "${book.author} · ${book.year}",
       style: const TextStyle(fontWeight: FontWeight.w400, fontSize: 13),
+    );
+  }
+
+  Widget _description() {
+    return Text(
+      book.description ?? "У книги нет описания...",
+      maxLines: 3,
+      overflow: TextOverflow.ellipsis,
+      style: const TextStyle(fontWeight: .w400, fontSize: 14),
     );
   }
 

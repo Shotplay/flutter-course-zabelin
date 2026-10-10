@@ -10,6 +10,8 @@ class BookItem {
   final List<String> genres;
   final bool isLike;
 
+  final String? description;
+
   const new({
     required this.id,
     required this.previewSrc,
@@ -18,6 +20,7 @@ class BookItem {
     required this.year,
     required this.genres,
     this.isLike = false,
+    this.description,
   });
 
   BookItem copyWith({
@@ -28,6 +31,7 @@ class BookItem {
     int? year,
     List<String>? genres,
     bool? isLike,
+    String? description,
   }) {
     return BookItem(
       id: id ?? this.id,
@@ -37,6 +41,7 @@ class BookItem {
       year: year ?? this.year,
       genres: genres ?? this.genres,
       isLike: isLike ?? this.isLike,
+      description: description ?? this.description,
     );
   }
 }

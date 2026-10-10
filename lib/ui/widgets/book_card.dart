@@ -13,7 +13,6 @@ class BookCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       width: 358,
-      height: 146,
       decoration: BoxDecoration(
         border: BoxBorder.all(color: const Color(0xFFECE8E1), width: 1),
         borderRadius: BorderRadius.circular(16),
