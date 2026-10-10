@@ -10,7 +10,13 @@
 include: package:flutter_lints/flutter.yaml
 
 analyzer:
+  errors:
+    avoid_print: ignore
   exclude:
+    - .vscode/**
+    - .direnv/**
+    - .dart_tool/**
+    - assets/**
     - build/**
     - web/**
     - windows/**
