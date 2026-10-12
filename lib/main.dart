@@ -1,4 +1,118 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_application_1/domain/entities/book.dart';
+import 'package:flutter_application_1/domain/entities/user.dart';
+import 'package:flutter_application_1/ui/screens/catalog_screen.dart';
+
+const List<BookItem> books = [
+  BookItem(
+    id: "1",
+    previewSrc: "assets/images/parfumer.png",
+    name: "Парфюмер. История одного убийцы",
+    author: "Патрик Зюскинд",
+    year: 1985,
+    genres: {"18+", "Драма", "Зарубежное"},
+    description: "«Парфюмер. История одного убийцы» — исторический психологический роман о человеке с феноменальным обонянием, который стремится создать аромат, способный подчинять людей. Патрик Зюскинд переносит действие во Францию XVIII века, где парижские улицы, мастерские и рынки существуют прежде всего в запахах: резких, сладких, гнилостных, почти осязаемых. Жан-Батист Гренуй лишён собственного человеческого запаха и отделён от окружающих этой особенностью. Его талант к парфюмерии постепенно превращается в одержимость совершенством.",
+  ),
+  BookItem(
+    id: "2",
+    previewSrc: "assets/images/death_souls.png",
+    name: "Мертвые души",
+    author: "Николай Гоголь",
+    year: 1842,
+    genres: {"16+", "Поэма", "Роман"},
+    description: "«...Говоря о „Мертвых душах“, можно вдоволь наговориться о России» — это суждение поэта и критика П. А. Вяземского объясняет особое место поэмы Гоголя в истории русской литературы: и огромный успех у читателей, и необычайную остроту полемики вокруг главной гоголевской книги, и многообразие высказанных мнений, каждое из которых так или иначе вовлекает в размышления о природе национального характера и культурного сознания, о настоящем и будущем России.",
+  ),
+  BookItem(
+    id: "3",
+    previewSrc: "assets/images/dorian_gray.png",
+    name: "Портрет Дориана Грея",
+    author: "Оскар Уайльд",
+    year: 1890,
+    genres: {"16+", "Роман", "Зарубежное"},
+    description: "«Портрет Дориана Грея» — самое знаменитое произведение Оскара Уайльда, единственный его роман, вызвавший в свое время шквал негативных оценок и тем не менее имевший невероятный успех. Главный герой романа, красавец Дориан, — фигура двойственная, неоднозначная. Тонкий эстет и романтик становится безжалостным преступником. Попытка сохранить свою необычайную красоту и молодость оборачивается провалом. Вместо героя стареет его портрет — но это не может продолжаться вечно, и смерть Дориана расставляет все по своим местам. Роман Оскара Уайльда продолжает быть очень актуальным и сегодня — разве погоня за вечной молодостью порой не оборачивается потерей своего истинного лица?",
+  ),
+  BookItem(
+    id: "4",
+    previewSrc: "assets/images/rose_name.png",
+    name: "Имя розы",
+    author: "Умберто Эко",
+    year: 1980,
+    genres: {"18+", "Роман", "Зарубежное"},
+    description: "«Имя розы» — философско-детективный роман о расследовании загадочных смертей в бенедиктинском монастыре Северной Италии XIV века. Умберто Эко помещает францисканца Вильгельма Баскервильского и его молодого спутника Адсона Мелькского в замкнутое пространство, где богословский спор соседствует с борьбой за книги и право на знание. Монастырь живёт по строгим правилам, а закрытая библиотека-лабиринт хранит рукописи и тревожные следы прошлого. Средневековая история соединяет детективную интригу, религиозные конфликты и размышления о вере, власти, цензуре и свободе мысли.",
+  ),
+  BookItem(
+    id: "5",
+    previewSrc: "assets/images/clean_architecture.png",
+    name: "Чистая архитектура. Искусство разработки программного обеспечения",
+    author: "Роберт Мартин",
+    year: 2017,
+    genres: {"12+", "Программирование", "Архитектура программного обеспечения"},
+    description: "`Идеальный программист` и `Чистый код` - легендарные бестселлеры Роберта Мартина - рассказывают, как достичь высот профессионализма. `Чистая архитектура` продолжает эту тему, но не предлагает несколько вариантов в стиле `решай сам`, а объясняет, что именно следует делать, по какой причине и почему именно такое решение станет принципиально важным для вашего успеха. Роберт Мартин дает прямые и лаконичные ответы на ключевые вопросы архитектуры и дизайна. `Чистую архитектуру` обязаны прочитать разработчики всех уровней, системные аналитики, архитекторы и каждый программист, который желает подняться по карьерной лестнице или хотя бы повлиять на людей, которые занимаются данной работой. Все архитектуры подчиняются одним и тем же правилам! Роберт Мартин (дядюшка Боб)",
+  ),
+  BookItem(
+    id: "6",
+    previewSrc: "assets/images/highload_architecture.png",
+    name: "Высоконагруженные приложения. Программирование, масштабирование, поддержка",
+    author: "Клеппман Мартин",
+    year: 2017,
+    genres: {
+      "16+",
+      "Программирование",
+      "Архитектура программного обеспечения",
+      "Базы данных и распределенные системы",
+    },
+    description: "В этой книге вы найдете ключевые принципы, алгоритмы и компромиссы, без которых не обойтись при разработке высоконагруженных систем для работы с данными. Материал рассматривается на примере внутреннего устройства популярных программных пакетов и фреймворков. В книге три основные части, посвященные, прежде всего, теоретическим аспектам работы с распределенными системами и базами данных. От читателя требуются базовые знания SQL и принципов работы баз данных.",
+  ),
+  BookItem(
+    id: "7",
+    previewSrc: "assets/images/catalog_lature.png",
+    name: "Каталог Латура, или Лакей маркиза де Сада",
+    author: "Николай Фробениус",
+    year: 2004,
+    genres: {"18+", "Мистика"},
+    description: "Николай Фробениус - известный норвежский писатель и сценарист. На русский язык переведены такие его романы, как `Адская притча`, `Другие места`, `Застенчивый порнограф`. Всемирную известность принесла писателю книга `Каталог Латура`, которую критики неизменно сравнивают с `Парфюмером` Патрика Зюскинда. События романа разворачиваются во Франции XVIII века. Главный герой, слуга маркиза де Сада, с рождения лишенный чувствительности к боли, посвящает себя анатомии, чтобы найти в человеческом мозге центр боли.",
+  ),
+  BookItem(
+    id: "8",
+    previewSrc: "assets/images/fahrenheit_451.png",
+    name: "451 градус по Фаренгейту",
+    author: "Рэй Брэдбери",
+    year: 1953,
+    genres: {"16+", "Научная фантастика", "Философский роман"},
+    description: "451 градус по Фаренгейту. Книга для чтения на английском языке. Повесть знаменитого американского писателя-фантаста «451 градус по Фаренгейту» написана более полувека назад, но своей актуальности не потеряла и по сей день. Ее лейтмотив - озабоченность духовным обликом будущего. Будущее, как его видел Бредбери, довольно мрачно: тоталитарное государство, в котором пресекается любое инакомыслие. Реклама, бесконечные телешоу - вот и все, что нужно человеку для безмятежного счастья. Так решило государство, и оно защищает своих граждан в меру собственного разумения: разговаривать друг с другом - значит думать, думать заставляют книги, поэтому, дабы не нарушать покоя обывателей, их надлежит сжигать. 451 градус по Фаренгейту - это температура горения бумаги. Предлагаем вниманию читателей неадаптированный текст повести, снабженный комментариями и словарем.",
+  ),
+  BookItem(
+    id: "9",
+    previewSrc: "assets/images/1984.png",
+    name: "1984",
+    author: "Джордж Оруэлл",
+    year: 1949,
+    genres: {"18+", "Роман", "Антиутопия", "Социальная фантастика"},
+    description: "Своеобразный антипод второй великой антиутопии XX века - `О дивный новый мир` Олдоса Хаксли. Что, в сущности, страшнее: доведенное до абсурда `общество потребления` - или доведенное до абсолюта `общество идеи`? По Оруэллу, нет и не может быть ничего ужаснее тотальной несвободы...",
+  ),
+  BookItem(
+    id: "10",
+    previewSrc: "assets/images/master_and_margarita.png",
+    name: "Мастер и Маргарита",
+    author: "Михаил Булгаков",
+    year: 1967,
+    genres: {"16+", "Роман", "Проза", "Сверхъестественное"},
+    description: "Москвичи 1930-х годов и свита дьявола, прокуратор Иудеи Понтий Пилат и философ Иешуа Га-Ноцри, талантливый и сумасшедший мастер и его возлюбленная Маргарита, ставшая ведьмой. Сатира на советское общество, библейский сюжет, бал сатаны. Многоуровневый и многогранный роман Михаила Булгакова уже не одно десятилетие ставит перед читателями вопросы и заставляет иначе взглянуть на самих себя.",
+  ),
+  BookItem(
+    id: "11",
+    previewSrc: "assets/images/storm.png",
+    name: "Гроза",
+    author: "Александр Островский",
+    year: 1860,
+    genres: {"12+", "Драматургия", "Классика"},
+    description: "Александр Николаевич Островский (1823–1886) — знаменитый русский драматург и основоположник национального театра. «Литературе Вы принесли в дар целую библиотеку художественных произведений, для сцены создали свой особый мир. Вы один достроили здание, в основание которого положили краеугольные камни Фонвизин, Грибоедов, Гоголь», — писал о нем критик И. Гончаров. В пьесе «Гроза» А.Н. Островский изобразил жизнь купеческого города середины XIX века и личную трагедию каждого, кто осмелился противостоять «темному царству» мещанского быта. Главная героиня Катерина мечтательна и самобытна, она не способна выдержать грубое отношение к себе и страдает от несправедливых попреков вдовы Кабановой, держащей в повиновении вcю семью. Не смирившись с трудной жизнью в доме с деспотичной хозяйкой, девушка делает вызов привычным устоям. Она сильно рискует, когда решается на измену мужу с тем, кого ее сердце любит взаправду. И даже вымышленный город Калинов не может закрыть глаза на этот проступок.",
+  ),
+];
+
+const User user = User(likes: {"1", "3", "6", "8", "9"});
+
+Map<String, BookItem> booksIds = Map.fromIterable(books, key: (b) => b.id);
 
 void main() {
   runApp(const App());
@@ -9,344 +123,12 @@ class App extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var catalogScreen = CatalogScreen(books: booksIds, user: user);
+
     return MaterialApp(
       debugShowCheckedModeBanner: true,
       theme: ThemeData(fontFamily: "Inter"),
-      home: Catalog(
-        books: [
-          Book(
-            imageSrc: "assets/images/parfumer.png",
-            name: "Парфюмер. История одного убийцы",
-            author: "Патрик Зюскинд",
-            year: 1985,
-            description: "«Парфюмер. История одного убийцы» — исторический психологический роман о человеке с феноменальным обонянием, который стремится создать аромат, способный подчинять людей. Патрик Зюскинд переносит действие во Францию XVIII века, где парижские улицы, мастерские и рынки существуют прежде всего в запахах: резких, сладких, гнилостных, почти осязаемых. Жан-Батист Гренуй лишён собственного человеческого запаха и отделён от окружающих этой особенностью. Его талант к парфюмерии постепенно превращается в одержимость совершенством.",
-            genres: [
-              BookGenre("18+", bold: true),
-              BookGenre("Драма"),
-              BookGenre("Зарубежное"),
-            ],
-          ),
-          Book(
-            imageSrc: "assets/images/dorian_gray.png",
-            name: "Портрет Дориана Грея",
-            author: "Оскар Уайльд",
-            year: 1890,
-            description: "«Портрет Дориана Грея» — самое знаменитое произведение Оскара Уайльда, единственный его роман, вызвавший в свое время шквал негативных оценок и тем не менее имевший невероятный успех. Главный герой романа, красавец Дориан, — фигура двойственная, неоднозначная. Тонкий эстет и романтик становится безжалостным преступником. Попытка сохранить свою необычайную красоту и молодость оборачивается провалом. Вместо героя стареет его портрет — но это не может продолжаться вечно, и смерть Дориана расставляет все по своим местам. Роман Оскара Уайльда продолжает быть очень актуальным и сегодня — разве погоня за вечной молодостью порой не оборачивается потерей своего истинного лица?",
-            genres: [
-              BookGenre("16+", bold: true),
-              BookGenre("Роман"),
-              BookGenre("Зарубежное"),
-            ],
-          ),
-          Book(
-            imageSrc: "assets/images/death_souls.png",
-            name: "Мертвые Души",
-            author: "Николай Гоголь",
-            year: 1842,
-            description: "«...Говоря о „Мертвых душах“, можно вдоволь наговориться о России» — это суждение поэта и критика П. А. Вяземского объясняет особое место поэмы Гоголя в истории русской литературы: и огромный успех у читателей, и необычайную остроту полемики вокруг главной гоголевской книги, и многообразие высказанных мнений, каждое из которых так или иначе вовлекает в размышления о природе национального характера и культурного сознания, о настоящем и будущем России.",
-            genres: [
-              BookGenre("16+", bold: true),
-              BookGenre("Поэма"),
-              BookGenre("Роман"),
-            ],
-          ),
-          Book(
-            imageSrc: "assets/images/rose_name.png",
-            name: "Имя розы",
-            author: "Умберто Эко",
-            year: 1980,
-            description: "«Имя розы» — философско-детективный роман о расследовании загадочных смертей в бенедиктинском монастыре Северной Италии XIV века. Умберто Эко помещает францисканца Вильгельма Баскервильского и его молодого спутника Адсона Мелькского в замкнутое пространство, где богословский спор соседствует с борьбой за книги и право на знание. Монастырь живёт по строгим правилам, а закрытая библиотека-лабиринт хранит рукописи и тревожные следы прошлого. Средневековая история соединяет детективную интригу, религиозные конфликты и размышления о вере, власти, цензуре и свободе мысли.",
-            genres: [
-              BookGenre("18+", bold: true),
-              BookGenre("Зарубежное"),
-              BookGenre("Роман"),
-            ],
-          ),
-          Book(
-            imageSrc: "assets/images/clean_architecture.png",
-            name: "Чистая архитектура. Искусство разработки программного обеспечения",
-            author: "Роберт Мартин",
-            year: 2026,
-            description: "'Идеальный программист' и 'Чистый код' - легендарные бестселлеры Роберта Мартина - рассказывают, как достичь высот профессионализма. 'Чистая архитектура' продолжает эту тему, но не предлагает несколько вариантов в стиле 'решай сам', а объясняет, что именно следует делать, по какой причине и почему именно такое решение станет принципиально важным для вашего успеха. .Роберт Мартин дает прямые и лаконичные ответы на ключевые вопросы архитектуры и дизайна. 'Чистую архитектуру' обязаны прочитать разработчики всех уровней, системные аналитики, архитекторы и каждый программист, который желает подняться по карьерной лестнице или хотя бы повлиять на людей, которые занимаются данной работой. .Все архитектуры подчиняются одним и тем же правилам! .Роберт Мартин (дядюшка Боб)",
-            genres: [
-              BookGenre("12+", bold: true),
-              BookGenre("Программирование"),
-              BookGenre("Архитектура Программного Обеспечения"),
-            ],
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-class Catalog extends StatefulWidget {
-  final List<Book> books;
-
-  const new({super.key, required this.books});
-
-  @override
-  State<Catalog> createState() => _CatalogState();
-}
-
-class _CatalogState extends State<Catalog> {
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: appBar(),
-      body: SafeArea(
-        child: Center(
-          child: Container(
-            decoration: BoxDecoration(color: Color(0xFFF2F2F2)),
-            child: Padding(
-              padding: EdgeInsetsGeometry.only(
-                top: 4,
-                right: 16,
-                left: 16,
-                bottom: 16,
-              ),
-              child: ListView(children: widget.books),
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-
-  AppBar appBar() {
-    return AppBar(
-      backgroundColor: Colors.white,
-      toolbarHeight: 97,
-      titleSpacing: 0,
-      title: Padding(
-        padding: EdgeInsetsGeometry.only(
-          top: 32,
-          right: 16,
-          bottom: 12,
-          left: 16,
-        ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              "Каталог книг",
-              style: TextStyle(fontWeight: FontWeight.w700, fontSize: 28),
-            ),
-            Text(
-              "${widget.books.length} книг в каталоге",
-              style: TextStyle(fontWeight: FontWeight.w400, fontSize: 14),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-class Book extends StatelessWidget {
-  final String imageSrc;
-  final String name;
-  final String author;
-  final int year;
-  final List<BookGenre> genres;
-  final String description;
-  final bool isFavorite;
-
-  const new({
-    super.key,
-    required this.imageSrc,
-    required this.name,
-    required this.author,
-    required this.year,
-    required this.genres,
-    required this.description,
-    this.isFavorite = false,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(16),
-      ),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          BookPreview(imageSrc: imageSrc, isFavorite: isFavorite),
-          Expanded(
-            child: BookInfo(
-              name: name,
-              author: author,
-              description: description,
-              year: year,
-              genres: genres,
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-class BookInfo extends StatelessWidget {
-  final String name;
-  final String author;
-  final String description;
-  final int year;
-  final List<BookGenre> genres;
-
-  const new({
-    super.key,
-    required this.name,
-    required this.author,
-    required this.description,
-    required this.year,
-    required this.genres,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: EdgeInsetsGeometry.all(12),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            name,
-            maxLines: 2,
-            overflow: TextOverflow.ellipsis,
-            style: TextStyle(fontWeight: FontWeight.w600, fontSize: 16),
-          ),
-          Text(
-            "$author · $year",
-            style: TextStyle(fontWeight: FontWeight.w400, fontSize: 13),
-          ),
-          SingleChildScrollView(
-            scrollDirection: Axis.horizontal,
-            child: Row(spacing: 9, children: genres),
-          ),
-          const SizedBox(height: 8),
-          Text(
-            description,
-            maxLines: 3,
-            overflow: TextOverflow.ellipsis,
-            style: TextStyle(fontWeight: .w400, fontSize: 14),
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-class BookGenre extends StatelessWidget {
-  final String genre;
-  final bool bold;
-
-  const new(this.genre, {super.key, this.bold = false});
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(
-        color: const Color(0xFFE6F0EF),
-        border: Border.all(color: const Color(0xFFE6F0EF)),
-        borderRadius: BorderRadius.circular(10),
-      ),
-      child: Padding(
-        padding: EdgeInsetsGeometry.symmetric(vertical: 3, horizontal: 8),
-        child: Text(
-          genre,
-          style: TextStyle(
-            color: const Color(0xFF1F5F5B),
-            fontWeight: bold ? FontWeight.bold : FontWeight.w500,
-            fontSize: 11,
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-class BookPreview extends StatelessWidget {
-  final String imageSrc;
-  final bool isFavorite;
-
-  const new({super.key, required this.imageSrc, required this.isFavorite});
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: EdgeInsetsGeometry.all(12),
-      child: Stack(
-        children: [
-          image(),
-          BookFavorite(isFavorite: isFavorite),
-        ],
-      ),
-    );
-  }
-
-  Widget image() {
-    return Container(
-      width: 88,
-      height: 120,
-      clipBehavior: Clip.antiAlias,
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(15),
-        boxShadow: [
-          BoxShadow(color: Colors.black, spreadRadius: 0.4, blurRadius: 1),
-        ],
-      ),
-      child: Image.asset(imageSrc, fit: BoxFit.cover),
-    );
-  }
-}
-
-class BookFavorite extends StatefulWidget {
-  final bool isFavorite;
-
-  const new({super.key, required this.isFavorite});
-
-  @override
-  State<BookFavorite> createState() => _BookFavoriteState();
-}
-
-class _BookFavoriteState extends State<BookFavorite> {
-  late bool _isFavorite;
-
-  @override
-  void initState() {
-    super.initState();
-    _isFavorite = widget.isFavorite;
-  }
-
-  void _changeFavorite() {
-    setState(() {
-      _isFavorite = !_isFavorite;
-    });
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Positioned(
-      top: 6,
-      left: 54,
-      width: 28,
-      height: 28,
-      child: CircleAvatar(
-        radius: 14,
-        backgroundColor: Colors.white,
-        child: (IconButton(
-          padding: EdgeInsets.zero,
-          icon: Icon(
-            _isFavorite ? Icons.favorite : Icons.favorite_border,
-            color: _isFavorite ? Colors.red : Colors.black,
-            size: 16,
-          ),
-          onPressed: () => _changeFavorite(),
-        )),
-      ),
+      home: catalogScreen,
     );
   }
 }
