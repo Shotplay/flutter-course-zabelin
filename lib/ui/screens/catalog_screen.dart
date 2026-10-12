@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/domain/entities/book.dart';
+import 'package:flutter_application_1/domain/entities/user.dart';
 import 'package:flutter_application_1/ui/widgets/book_list.dart';
 import 'package:flutter_application_1/ui/widgets/catalog_app_bar.dart';
 
 class CatalogScreen extends StatefulWidget {
   final BookItemMap books;
+  final User user;
 
-  const new({super.key, required this.books});
+  const new({super.key, required this.books, required this.user});
 
   @override
   State<CatalogScreen> createState() => _CatalogScreenState();
@@ -14,42 +16,28 @@ class CatalogScreen extends StatefulWidget {
 
 class _CatalogScreenState extends State<CatalogScreen> {
   late final BookItemMap _books;
-
-  final Set<String> _likedIds = {};
+  late User _user;
   bool _isLikesVisible = false;
 
   @override
   void initState() {
     super.initState();
     _books = widget.books;
-    _likedIds.addAll(
-      _books.entries.where((b) => b.value.isLike).map((b) => b.key),
-    );
+    _user = widget.user;
   }
 
   void _onLikeTap(String bookId) {
-    final savedBook = _books[bookId];
-    if (savedBook == null) return;
+    final likes = {..._user.likes};
+    if (!likes.add(bookId)) likes.remove(bookId);
+    _user = _user.copyWith(likes: likes);
 
-    bool newLike = !(savedBook.isLike);
-
-    setState(() {
-      _books[bookId] = savedBook.copyWith(isLike: newLike);
-
-      if (newLike) {
-        _likedIds.add(bookId);
-      } else {
-        _likedIds.remove(bookId);
-      }
-
-      print("Change book like. like=$newLike id=$bookId");
-    });
+    setState(() {});
+    print("Change book like. id=$bookId");
   }
 
   void _onLikeVisibleTap() {
-    setState(() {
-      _isLikesVisible = !_isLikesVisible;
-    });
+    _isLikesVisible = !_isLikesVisible;
+    setState(() {});
   }
 
   @override
@@ -59,7 +47,7 @@ class _CatalogScreenState extends State<CatalogScreen> {
         booksCount: _books.length,
         onLikeVisibleTap: _onLikeVisibleTap,
         isLikesVisible: _isLikesVisible,
-        likesCount: _likedIds.length,
+        likesCount: _user.likes.length,
       ),
       body: SafeArea(
         child: Container(
@@ -68,7 +56,7 @@ class _CatalogScreenState extends State<CatalogScreen> {
             books: _books,
             onLikeTap: _onLikeTap,
             isLikesVisible: _isLikesVisible,
-            likedIds: _likedIds,
+            likes: _user.likes,
           ),
         ),
       ),

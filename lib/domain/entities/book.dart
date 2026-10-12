@@ -1,4 +1,3 @@
-typedef BookItemTapLikeFunc = void Function(String bookId);
 typedef BookItemMap = Map<String, BookItem>;
 
 class BookItem {
@@ -7,8 +6,7 @@ class BookItem {
   final String name;
   final String author;
   final int year;
-  final List<String> genres;
-  final bool isLike;
+  final Set<String> genres;
 
   final String? description;
 
@@ -19,7 +17,6 @@ class BookItem {
     required this.author,
     required this.year,
     required this.genres,
-    this.isLike = false,
     this.description,
   });
 
@@ -29,7 +26,7 @@ class BookItem {
     String? name,
     String? author,
     int? year,
-    List<String>? genres,
+    Set<String>? genres,
     bool? isLike,
     String? description,
   }) {
@@ -40,7 +37,6 @@ class BookItem {
       author: author ?? this.author,
       year: year ?? this.year,
       genres: genres ?? this.genres,
-      isLike: isLike ?? this.isLike,
       description: description ?? this.description,
     );
   }

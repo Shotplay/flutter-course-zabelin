@@ -4,8 +4,8 @@ import 'package:flutter_application_1/ui/widgets/book_card.dart';
 
 class BookList extends StatelessWidget {
   final BookItemMap books;
-  final BookItemTapLikeFunc onLikeTap;
-  final Set<String> likedIds;
+  final ValueChanged<String> onLikeTap;
+  final Set<String> likes;
   final bool isLikesVisible;
 
   const new({
@@ -13,14 +13,17 @@ class BookList extends StatelessWidget {
     required this.books,
     required this.onLikeTap,
     required this.isLikesVisible,
-    required this.likedIds,
+    required this.likes,
   });
 
   @override
   Widget build(BuildContext context) {
-    if (isLikesVisible && likedIds.isNotEmpty) {
-      final likedEntries = likedIds.map((id) => books[id]!);
-      return list(likedEntries);
+    if (isLikesVisible && likes.isNotEmpty) {
+      final liked = likes
+          .where((id) => books[id] != null)
+          .map((id) => books[id]!);
+
+      return list(liked);
     }
 
     if (isLikesVisible) {
@@ -36,7 +39,11 @@ class BookList extends StatelessWidget {
       itemCount: books.length,
       itemBuilder: (_, i) {
         var book = books.elementAt(i);
-        return BookCard(book: book, onLikeTap: () => onLikeTap(book.id));
+        return BookCard(
+          book: book,
+          onLikeTap: () => onLikeTap(book.id),
+          isLike: likes.contains(book.id),
+        );
       },
       separatorBuilder: (_, _) => const SizedBox(height: 12),
     );

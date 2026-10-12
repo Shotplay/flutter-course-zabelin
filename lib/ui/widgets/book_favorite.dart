@@ -4,8 +4,14 @@ import 'package:flutter_application_1/domain/entities/book.dart';
 class BookFavorite extends StatelessWidget {
   final BookItem book;
   final VoidCallback onLikeTap;
+  final bool isLike;
 
-  const new({super.key, required this.book, required this.onLikeTap});
+  const new({
+    super.key,
+    required this.book,
+    required this.onLikeTap,
+    required this.isLike,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -21,8 +27,8 @@ class BookFavorite extends StatelessWidget {
           onPressed: onLikeTap,
           padding: const EdgeInsets.all(0),
           icon: Icon(
-            book.isLike ? Icons.favorite : Icons.favorite_border,
-            color: book.isLike ? Colors.red : Colors.grey,
+            isLike ? Icons.favorite : Icons.favorite_border,
+            color: isLike ? Colors.red : Colors.grey,
             size: 16,
           ),
         ),
