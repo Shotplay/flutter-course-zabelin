@@ -1,50 +1,38 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_application_1/domain/entities/book.dart';
-import 'package:flutter_application_1/ui/widgets/book_card.dart';
+import 'package:flutter_app/data/store/books_store.dart';
+import 'package:flutter_app/data/store/user_store.dart';
+import 'package:flutter_app/domain/entities/book.dart';
+import 'package:flutter_app/ui/widgets/book_card.dart';
+import 'package:provider/provider.dart';
 
 class BookList extends StatelessWidget {
-  final BookItemMap books;
-  final ValueChanged<String> onLikeTap;
-  final Set<String> likes;
   final bool isLikesVisible;
 
-  const new({
-    super.key,
-    required this.books,
-    required this.onLikeTap,
-    required this.isLikesVisible,
-    required this.likes,
-  });
+  const BookList({super.key, required this.isLikesVisible});
 
   @override
   Widget build(BuildContext context) {
-    if (isLikesVisible && likes.isNotEmpty) {
+    if (isLikesVisible) {
+      final likes = context.select<UserStore, Set<String>>((s) => s.likes);
+      if (likes.isEmpty) return notFound();
+
+      final booksStore = context.read<BooksStore>();
       final liked = likes
-          .where((id) => books[id] != null)
-          .map((id) => books[id]!);
+          .where((id) => booksStore.has(id))
+          .map((id) => booksStore.getBook(id)!)
+          .toList();
 
       return list(liked);
     }
 
-    if (isLikesVisible) {
-      return notFound();
-    }
-
-    return list(books.values);
+    return list(context.read<BooksStore>().books.values.toList());
   }
 
-  Widget list(Iterable<BookItem> books) {
+  Widget list(List<BookItem> books) {
     return ListView.separated(
       padding: const EdgeInsets.all(16).copyWith(top: 4),
       itemCount: books.length,
-      itemBuilder: (_, i) {
-        var book = books.elementAt(i);
-        return BookCard(
-          book: book,
-          onLikeTap: () => onLikeTap(book.id),
-          isLike: likes.contains(book.id),
-        );
-      },
+      itemBuilder: (_, i) => BookCard(book: books.elementAt(i)),
       separatorBuilder: (_, _) => const SizedBox(height: 12),
     );
   }

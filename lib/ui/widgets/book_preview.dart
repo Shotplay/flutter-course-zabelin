@@ -1,17 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_application_1/domain/entities/book.dart';
-import 'package:flutter_application_1/ui/widgets/book_favorite.dart';
+import 'package:flutter_app/ui/widgets/book_favorite.dart';
 
 class BookPreview extends StatelessWidget {
-  final BookItem book;
-  final VoidCallback onLikeTap;
-  final bool isLike;
+  final String bookId;
+  final String previewSrc;
 
-  const new({
+  const BookPreview({
     super.key,
-    required this.book,
-    required this.onLikeTap,
-    required this.isLike,
+    required this.bookId,
+    required this.previewSrc,
   });
 
   @override
@@ -19,7 +16,7 @@ class BookPreview extends StatelessWidget {
     return Stack(
       children: [
         image(),
-        BookFavorite(book: book, onLikeTap: onLikeTap, isLike: isLike),
+        BookFavorite(bookId: bookId),
       ],
     );
   }
@@ -35,7 +32,7 @@ class BookPreview extends StatelessWidget {
           BoxShadow(color: Colors.black, spreadRadius: 0.4, blurRadius: 1),
         ],
       ),
-      child: Image.asset(book.previewSrc, fit: BoxFit.cover),
+      child: Image.asset(previewSrc, fit: BoxFit.cover),
     );
   }
 }

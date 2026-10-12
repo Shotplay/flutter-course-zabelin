@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 class BookGenre extends StatelessWidget {
   final String genre;
 
-  const new(this.genre, {super.key});
+  const BookGenre(this.genre, {super.key});
 
   @override
   Widget build(BuildContext context) {

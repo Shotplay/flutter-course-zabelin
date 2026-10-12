@@ -1,18 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_application_1/domain/entities/book.dart';
-import 'package:flutter_application_1/ui/widgets/book_info.dart';
-import 'package:flutter_application_1/ui/widgets/book_preview.dart';
+import 'package:flutter_app/domain/entities/book.dart';
+import 'package:flutter_app/ui/widgets/book_info.dart';
+import 'package:flutter_app/ui/widgets/book_preview.dart';
 
 class BookCard extends StatelessWidget {
   final BookItem book;
-  final VoidCallback onLikeTap;
-  final bool isLike;
 
-  const new({
+  const BookCard({
     super.key,
     required this.book,
-    required this.onLikeTap,
-    required this.isLike,
   });
 
   @override
@@ -32,8 +28,8 @@ class BookCard extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           spacing: 12,
           children: [
-            BookPreview(book: book, onLikeTap: onLikeTap, isLike: isLike),
-            BookInfo(book: book),
+            BookPreview(bookId: book.id, previewSrc: book.previewSrc),
+            BookInfo.fromBook(book),
           ],
         ),
       ),

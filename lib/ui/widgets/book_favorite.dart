@@ -1,17 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_application_1/domain/entities/book.dart';
+import 'package:flutter_app/data/store/user_store.dart';
+import 'package:provider/provider.dart';
 
 class BookFavorite extends StatelessWidget {
-  final BookItem book;
-  final VoidCallback onLikeTap;
-  final bool isLike;
+  final String bookId;
 
-  const new({
-    super.key,
-    required this.book,
-    required this.onLikeTap,
-    required this.isLike,
-  });
+  const BookFavorite({super.key, required this.bookId});
 
   @override
   Widget build(BuildContext context) {
@@ -24,12 +18,15 @@ class BookFavorite extends StatelessWidget {
         radius: 14,
         backgroundColor: Colors.white,
         child: IconButton(
-          onPressed: onLikeTap,
+          onPressed: () => context.read<UserStore>().toggleLike(bookId),
           padding: const EdgeInsets.all(0),
-          icon: Icon(
-            isLike ? Icons.favorite : Icons.favorite_border,
-            color: isLike ? Colors.red : Colors.grey,
-            size: 16,
+          icon: Selector<UserStore, bool>(
+            selector: (_, userStore) => userStore.isLiked(bookId),
+            builder: (_, isLike, _) => Icon(
+              isLike ? Icons.favorite : Icons.favorite_border,
+              color: isLike ? Colors.red : Colors.grey,
+              size: 16,
+            ),
           ),
         ),
       ),

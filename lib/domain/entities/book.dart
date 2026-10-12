@@ -10,7 +10,7 @@ class BookItem {
 
   final String? description;
 
-  const new({
+  const BookItem({
     required this.id,
     required this.previewSrc,
     required this.name,
