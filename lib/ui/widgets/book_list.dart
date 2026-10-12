@@ -32,10 +32,12 @@ class BookList extends StatelessWidget {
 
   Widget list(Iterable<BookItem> books) {
     return ListView.separated(
-      padding: EdgeInsets.only(top: 4, right: 16, bottom: 16, left: 16),
+      padding: const EdgeInsets.all(16).copyWith(top: 4),
       itemCount: books.length,
-      itemBuilder: (_, i) =>
-          BookCard(book: books.elementAt(i), onLikeTap: onLikeTap),
+      itemBuilder: (_, i) {
+        var book = books.elementAt(i);
+        return BookCard(book: book, onLikeTap: () => onLikeTap(book.id));
+      },
       separatorBuilder: (_, _) => const SizedBox(height: 12),
     );
   }

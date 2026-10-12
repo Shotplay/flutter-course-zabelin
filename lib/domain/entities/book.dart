@@ -1,4 +1,4 @@
-typedef BookItemTapLikeFunc = void Function(BookItem book);
+typedef BookItemTapLikeFunc = void Function(String bookId);
 typedef BookItemMap = Map<String, BookItem>;
 
 class BookItem {

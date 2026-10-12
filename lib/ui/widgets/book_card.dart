@@ -5,7 +5,7 @@ import 'package:flutter_application_1/ui/widgets/book_preview.dart';
 
 class BookCard extends StatelessWidget {
   final BookItem book;
-  final BookItemTapLikeFunc onLikeTap;
+  final VoidCallback onLikeTap;
 
   const new({super.key, required this.book, required this.onLikeTap});
 
@@ -13,13 +13,13 @@ class BookCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       width: 358,
-      decoration: BoxDecoration(
-        border: BoxBorder.all(color: const Color(0xFFECE8E1), width: 1),
-        borderRadius: BorderRadius.circular(16),
+      decoration: const BoxDecoration(
+        border: BoxBorder.fromBorderSide(BorderSide(color: Color(0xFFECE8E1), width: 1)),
+        borderRadius: BorderRadius.all(Radius.circular(16)),
         color: Colors.white,
       ),
       child: Padding(
-        padding: const EdgeInsetsGeometry.all(12),
+        padding: const EdgeInsets.all(12),
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           spacing: 12,

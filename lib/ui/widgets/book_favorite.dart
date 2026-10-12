@@ -3,7 +3,7 @@ import 'package:flutter_application_1/domain/entities/book.dart';
 
 class BookFavorite extends StatelessWidget {
   final BookItem book;
-  final BookItemTapLikeFunc onLikeTap;
+  final VoidCallback onLikeTap;
 
   const new({super.key, required this.book, required this.onLikeTap});
 
@@ -18,7 +18,7 @@ class BookFavorite extends StatelessWidget {
         radius: 14,
         backgroundColor: Colors.white,
         child: IconButton(
-          onPressed: () => onLikeTap(book),
+          onPressed: onLikeTap,
           padding: const EdgeInsets.all(0),
           icon: Icon(
             book.isLike ? Icons.favorite : Icons.favorite_border,

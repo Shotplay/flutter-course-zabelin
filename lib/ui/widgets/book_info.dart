@@ -36,10 +36,10 @@ class BookInfo extends StatelessWidget {
 
   Widget _description() {
     return Text(
-      book.description ?? "У книги нет описания...",
+      book.description ?? "У книги пока не добавлено описание...",
       maxLines: 3,
       overflow: TextOverflow.ellipsis,
-      style: const TextStyle(fontWeight: .w400, fontSize: 14),
+      style: const TextStyle(fontWeight: FontWeight.w400, fontSize: 14),
     );
   }
 

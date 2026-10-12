@@ -1,16 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_application_1/domain/entities/book.dart';
 
 class CatalogAppBarTitle extends StatelessWidget {
-  final BookItemMap books;
-  final Set<String> likedIds;
+  final int booksCount;
+  final int likesCount;
   final VoidCallback onLikeVisibleTap;
   final bool isLikesVisible;
 
   const new({
     super.key,
-    required this.books,
-    required this.likedIds,
+    required this.booksCount,
+    required this.likesCount,
     required this.onLikeVisibleTap,
     required this.isLikesVisible,
   });
@@ -18,7 +17,7 @@ class CatalogAppBarTitle extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsetsGeometry.only(
+      padding: const EdgeInsets.only(
         top: 32,
         right: 16,
         bottom: 12,
@@ -41,7 +40,7 @@ class CatalogAppBarTitle extends StatelessWidget {
 
   Text _counts() {
     return Text(
-      "В каталоге: ${books.length} | В избранном: ${likedIds.length}",
+      "В каталоге: $booksCount | В избранном: $likesCount",
       style: const TextStyle(fontWeight: FontWeight.w400, fontSize: 14),
     );
   }

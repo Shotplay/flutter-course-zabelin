@@ -11,7 +11,7 @@ class BookGenre extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
       decoration: const BoxDecoration(
         color: Color(0xFFE6F0EF),
-        border: Border.fromBorderSide(BorderSide(color: Color(0xFFE6F0EF))),
+        border: Border.fromBorderSide(BorderSide(color: Color(0xFFE6F0EF), width: 1)),
         borderRadius: BorderRadius.all(Radius.circular(10)),
       ),
       child: Text(

@@ -4,7 +4,7 @@ import 'package:flutter_application_1/ui/widgets/book_favorite.dart';
 
 class BookPreview extends StatelessWidget {
   final BookItem book;
-  final BookItemTapLikeFunc onLikeTap;
+  final VoidCallback onLikeTap;
 
   const new({super.key, required this.book, required this.onLikeTap});
 

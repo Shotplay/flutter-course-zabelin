@@ -27,22 +27,22 @@ class _CatalogScreenState extends State<CatalogScreen> {
     );
   }
 
-  void _onLikeTap(BookItem book) {
-    final savedBook = _books[book.id];
+  void _onLikeTap(String bookId) {
+    final savedBook = _books[bookId];
     if (savedBook == null) return;
 
     bool newLike = !(savedBook.isLike);
 
     setState(() {
-      _books[book.id] = savedBook.copyWith(isLike: newLike);
+      _books[bookId] = savedBook.copyWith(isLike: newLike);
 
       if (newLike) {
-        _likedIds.add(book.id);
+        _likedIds.add(bookId);
       } else {
-        _likedIds.remove(book.id);
+        _likedIds.remove(bookId);
       }
 
-      print("Change book like. like=$newLike id=${book.id}");
+      print("Change book like. like=$newLike id=$bookId");
     });
   }
 
@@ -56,10 +56,10 @@ class _CatalogScreenState extends State<CatalogScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: CatalogAppBar(
-        books: _books,
+        booksCount: _books.length,
         onLikeVisibleTap: _onLikeVisibleTap,
         isLikesVisible: _isLikesVisible,
-        likedIds: _likedIds,
+        likesCount: _likedIds.length,
       ),
       body: SafeArea(
         child: Container(
