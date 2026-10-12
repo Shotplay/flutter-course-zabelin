@@ -20,10 +20,18 @@
       in
       {
         devShells.default = pkgs.mkShell {
+          env = {
+            JAVA_HOME="${pkgs.jdk17}/lib/openjdk";
+          };
+
           packages = with pkgs; [
             flutter
             jdk17
           ];
+
+          shellHook = ''
+            flutter config --jdk-dir "${pkgs.jdk17}/lib/openjdk"
+          '';
         };
       }
     );

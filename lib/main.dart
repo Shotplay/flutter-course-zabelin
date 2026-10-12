@@ -125,7 +125,10 @@ const List<BookItem> books = [
 
 const User user = User(likes: {"1", "3", "6", "8", "9"});
 
-Map<String, BookItem> booksIds = Map.fromIterable(books, key: (b) => b.id);
+final Map<String, BookItem> booksIds = Map.fromIterable(
+  books,
+  key: (b) => b.id,
+);
 
 void main() {
   runApp(const App());
