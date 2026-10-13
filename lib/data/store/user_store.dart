@@ -6,7 +6,7 @@ class UserStore extends ChangeNotifier {
 
   UserStore({required User user}) : _user = user;
 
-  Set<String> get likes => _user.likes;
+  Set<String> get likes => Set.unmodifiable(_user.likes);
   int get likesCount => _user.likes.length;
   bool isLiked(String bookId) => _user.likes.contains(bookId);
   
