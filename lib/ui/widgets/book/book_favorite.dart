@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_app/data/user_session.dart';
+import 'package:flutter_app/ui/view/user_session.dart';
 import 'package:provider/provider.dart';
 
 class BookFavorite extends StatelessWidget {

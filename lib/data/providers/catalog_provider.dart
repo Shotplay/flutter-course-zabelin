@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_app/data/store/books_store.dart';
-import 'package:flutter_app/data/view/books_view_model.dart';
+import 'package:flutter_app/ui/view/books_view_model.dart';
 // ignore: unused_import
 import 'package:flutter_app/domain/entities/book.dart';
 import 'package:provider/provider.dart';

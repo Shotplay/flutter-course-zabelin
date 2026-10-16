@@ -74,27 +74,17 @@ class _BookAddFormState extends State<BookAddForm> {
             ),
             BookAddFormSendButton(
               formKey: _formKey,
-              previewSrc: _previewController.text,
-              name: _nameController.text,
-              author: _authorController.text,
-              year: _yearController.text,
-              genres: _genresController.text,
-              description: _descriptionController.text,
-              clear: _clear,
+              previewController: _previewController,
+              nameController: _nameController,
+              authorController: _authorController,
+              yearController: _yearController,
+              genresController: _genresController,
+              descriptionController: _descriptionController,
             ),
           ],
         ),
       ),
     );
-  }
-
-  void _clear() {
-    _previewController.clear();
-    _nameController.clear();
-    _authorController.clear();
-    _yearController.clear();
-    _genresController.clear();
-    _descriptionController.clear();
   }
 
   String? _validateName(String? value) {

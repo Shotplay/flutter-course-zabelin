@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_app/data/user_session.dart';
-import 'package:flutter_app/data/view/books_view_model.dart';
+import 'package:flutter_app/ui/view/user_session.dart';
+import 'package:flutter_app/ui/view/books_view_model.dart';
 import 'package:flutter_app/ui/widgets/catalog/appBar/catalog_app_bar_button.dart';
 import 'package:provider/provider.dart';
 
