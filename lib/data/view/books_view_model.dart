@@ -54,11 +54,24 @@ class BooksViewModel extends ChangeNotifier {
     }
   }
 
+  Future<bool> refresh() async {
+    if (isBusy) return false;
+    _state = BooksViewModelState.refreshing;
+    _error = null;
+    notifyListeners();
+
+    return await _load();
+  }
+
   Future<bool> load() async {
     if (isBusy) return false;
     _state = BooksViewModelState.loading;
     _error = null;
 
+    return await _load();
+  }
+
+  Future<bool> _load() async {
     try {
       final books = await store.fetchBooks();
       _books = Map.fromIterable(books, key: (b) => b.id);

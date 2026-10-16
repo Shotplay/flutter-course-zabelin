@@ -3,7 +3,7 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 part 'user.freezed.dart';
 part 'user.g.dart';
 
-enum UserSessionState { none, loading, togglingLike, disposed }
+enum UserSessionState { none, loading, togglingLike, refreshing, disposed }
 
 @freezed
 abstract class User with _$User {

@@ -58,12 +58,25 @@ class UserSession extends ChangeNotifier {
     }
   }
 
+  Future<bool> refresh() async {
+    if (isBusy) return false;
+    _state = UserSessionState.refreshing;
+    _error = null;
+    notifyListeners();
+
+    return await _load(userId);
+  }
+
   Future<bool> load(String userId) async {
     if (isBusy) return false;
     _state = UserSessionState.loading;
     _error = null;
     notifyListeners();
 
+    return await _load(userId);
+  }
+
+  Future<bool> _load(String userId) async {
     try {
       final user = await store.fetchUser(userId);
       _user = user;

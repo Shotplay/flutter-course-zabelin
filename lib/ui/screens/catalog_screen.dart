@@ -3,7 +3,7 @@ import 'package:flutter_app/data/user_session.dart';
 import 'package:flutter_app/data/view/books_view_model.dart';
 import 'package:flutter_app/domain/entities/book.dart';
 import 'package:flutter_app/ui/widgets/book/book_list.dart';
-import 'package:flutter_app/ui/widgets/catalog_app_bar.dart';
+import 'package:flutter_app/ui/widgets/catalog/appBar/catalog_app_bar.dart';
 import 'package:flutter_app/ui/widgets/loading.dart';
 import 'package:provider/provider.dart';
 

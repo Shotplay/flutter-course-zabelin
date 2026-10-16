@@ -18,18 +18,7 @@ class BookFavorite extends StatelessWidget {
         radius: 14,
         backgroundColor: Colors.white,
         child: IconButton(
-          onPressed: () {
-            final userSession = context.read<UserSession>();
-            if (userSession.isBusy) {
-              ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(
-                  content: Text("Слишком быстро, подождите немного..."),
-                ),
-              );
-            }
-
-            userSession.toggleLike(bookId);
-          },
+          onPressed: () => _onPressed(context),
           padding: const EdgeInsets.all(0),
           icon: Selector<UserSession, bool>(
             selector: (_, userSession) => userSession.isLikedBook(bookId),
@@ -42,5 +31,16 @@ class BookFavorite extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  void _onPressed(BuildContext context) {
+    final userSession = context.read<UserSession>();
+    if (userSession.isBusy) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text("Слишком быстро, подождите немного...")),
+      );
+    }
+
+    userSession.toggleLike(bookId);
   }
 }
