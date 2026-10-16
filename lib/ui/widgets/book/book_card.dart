@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_app/domain/entities/book.dart';
-import 'package:flutter_app/ui/widgets/book_info.dart';
-import 'package:flutter_app/ui/widgets/book_preview.dart';
+import 'package:flutter_app/ui/widgets/book/book_info.dart';
+import 'package:flutter_app/ui/widgets/book/book_preview.dart';
 
 class BookCard extends StatelessWidget {
   final BookItem book;
@@ -17,7 +17,7 @@ class BookCard extends StatelessWidget {
       width: 358,
       decoration: const BoxDecoration(
         border: BoxBorder.fromBorderSide(
-          BorderSide(color: Color(0xFFECE8E1), width: 1),
+          BorderSide(color: Color(0xFFF6F4F0), width: 1),
         ),
         borderRadius: BorderRadius.all(Radius.circular(16)),
         color: Colors.white,

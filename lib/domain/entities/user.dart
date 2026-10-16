@@ -1,9 +1,16 @@
-class User {
-  final Set<String> likes;
+import 'package:freezed_annotation/freezed_annotation.dart';
 
-  const User({required this.likes});
+part 'user.freezed.dart';
+part 'user.g.dart';
 
-  User copyWith({Set<String>? likes}) {
-    return User(likes: likes ?? this.likes);
-  }
+enum UserSessionState { none, loading, togglingLike }
+
+@freezed
+abstract class User with _$User {
+  const factory User({required String id, required Set<String> likedBooks}) =
+      _User;
+
+  static User get zero => User(id: "", likedBooks: {});
+
+  factory User.fromJson(Map<String, dynamic> json) => _$UserFromJson(json);
 }

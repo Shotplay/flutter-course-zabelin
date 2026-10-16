@@ -1,43 +1,24 @@
+import 'package:freezed_annotation/freezed_annotation.dart';
+
+part 'book.freezed.dart';
+part 'book.g.dart';
+
 typedef BookItemMap = Map<String, BookItem>;
 
-class BookItem {
-  final String id;
-  final String previewSrc;
-  final String name;
-  final String author;
-  final int year;
-  final Set<String> genres;
+enum BooksViewModelState { none, loading, addingBook }
 
-  final String? description;
+@freezed
+abstract class BookItem with _$BookItem {
+  const factory BookItem({
+    required String id,
+    required String previewSrc,
+    required String name,
+    required String author,
+    required int year,
+    required Set<String> genres,
+    @Default(null) String? description,
+  }) = _BookItem;
 
-  const BookItem({
-    required this.id,
-    required this.previewSrc,
-    required this.name,
-    required this.author,
-    required this.year,
-    required this.genres,
-    this.description,
-  });
-
-  BookItem copyWith({
-    String? id,
-    String? previewSrc,
-    String? name,
-    String? author,
-    int? year,
-    Set<String>? genres,
-    bool? isLike,
-    String? description,
-  }) {
-    return BookItem(
-      id: id ?? this.id,
-      previewSrc: previewSrc ?? this.previewSrc,
-      name: name ?? this.name,
-      author: author ?? this.author,
-      year: year ?? this.year,
-      genres: genres ?? this.genres,
-      description: description ?? this.description,
-    );
-  }
+  factory BookItem.fromJson(Map<String, dynamic> json) =>
+      _$BookItemFromJson(json);
 }

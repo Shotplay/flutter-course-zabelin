@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_app/data/store/books_store.dart';
-import 'package:flutter_app/data/store/user_store.dart';
+import 'package:flutter_app/data/user_session.dart';
+import 'package:flutter_app/data/view/books_view_model.dart';
+import 'package:flutter_app/ui/widgets/book/book_add_form.dart';
+import 'package:flutter_app/ui/widgets/catalog_app_bar_button.dart';
 import 'package:provider/provider.dart';
 
 class CatalogAppBarTitle extends StatelessWidget {
@@ -20,7 +22,17 @@ class CatalogAppBarTitle extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         spacing: 6,
-        children: [_category(), _counts(), _likeButton()],
+        children: [
+          _category(),
+          _counts(),
+          SingleChildScrollView(
+            scrollDirection: Axis.horizontal,
+            child: Row(
+              spacing: 6,
+              children: [_refreshButton(), _likeButton(), _addBookButton()],
+            ),
+          ),
+        ],
       ),
     );
   }
@@ -33,15 +45,73 @@ class CatalogAppBarTitle extends StatelessWidget {
   }
 
   Widget _counts() {
-    return Selector2<UserStore, BooksStore, (int, int)>(
-      selector: (_, userStore, booksStore) =>
-          (booksStore.booksCount, userStore.likesCount),
+    return Selector2<UserSession, BooksViewModel, (int, int)>(
+      selector: (_, userSession, booksVM) =>
+          (booksVM.count, userSession.likedCount),
       builder: (_, counts, _) {
         return Text(
           "В каталоге: ${counts.$1} | В избранном: ${counts.$2}",
           style: const TextStyle(fontWeight: FontWeight.w400, fontSize: 14),
         );
       },
+    );
+  }
+
+  Widget _refreshButton() {
+    return Builder(
+      builder: (context) => CatalogAppBarButton(
+        title: "Обновить",
+        onTap: () async {
+          ScaffoldMessenger.of(
+            context,
+          ).showSnackBar(const SnackBar(content: Text("Обновляю...")));
+
+          final userSession = context.read<UserSession>();
+          final successes = await Future.wait([
+            context.read<BooksViewModel>().load(),
+            userSession.load(userSession.userId),
+          ]);
+
+          if (!context.mounted) return;
+          ScaffoldMessenger.of(context).clearSnackBars();
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(
+                successes.every((b) => b) && successes[1]
+                    ? "Успешно обновлено"
+                    : "Не удалось обновить",
+              ),
+            ),
+          );
+        },
+        backgroundColor: Colors.white,
+        icon: Icons.refresh,
+        iconColor: Colors.black,
+        textColor: Colors.black,
+      ),
+    );
+  }
+
+  Widget _addBookButton() {
+    return Builder(
+      builder: (context) => CatalogAppBarButton(
+        title: "Добавить книгу",
+        backgroundColor: Colors.white,
+        icon: Icons.add,
+        iconColor: Colors.black,
+        textColor: Colors.black,
+        onTap: () {
+          final booksVM = context.read<BooksViewModel>();
+
+          showDialog(
+            context: context,
+            builder: (_) => ChangeNotifierProvider.value(
+              value: booksVM,
+              child: const AlertDialog(content: BookAddForm()),
+            ),
+          );
+        },
+      ),
     );
   }
 
@@ -55,42 +125,15 @@ class CatalogAppBarTitle extends StatelessWidget {
         : const Color(0xFF1A1A1A);
 
     final buttonColor = isLikesVisible ? Colors.red : Colors.grey;
-    final buttonImage = isLikesVisible ? Icons.favorite : Icons.favorite_border;
+    final icon = isLikesVisible ? Icons.favorite : Icons.favorite_border;
 
-    return SizedBox(
-      height: 30,
-      child: Ink(
-        decoration: BoxDecoration(
-          color: backgroundColor,
-          borderRadius: const BorderRadius.all(Radius.circular(16)),
-          border: const Border.fromBorderSide(
-            BorderSide(color: Color(0xFFECE8E1), width: 1),
-          ),
-        ),
-        child: InkWell(
-          onTap: onLikeVisibleTap,
-          borderRadius: const BorderRadius.all(Radius.circular(16)),
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 12),
-            child: Row(
-              mainAxisSize: MainAxisSize.min,
-              spacing: 6,
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Icon(buttonImage, color: buttonColor, size: 14),
-                Text(
-                  "Только избранные",
-                  style: TextStyle(
-                    color: textColor,
-                    fontWeight: FontWeight.w500,
-                    fontSize: 13,
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ),
-      ),
+    return CatalogAppBarButton(
+      title: "Только избранные",
+      onTap: onLikeVisibleTap,
+      backgroundColor: backgroundColor,
+      icon: icon,
+      iconColor: buttonColor,
+      textColor: textColor,
     );
   }
 }
