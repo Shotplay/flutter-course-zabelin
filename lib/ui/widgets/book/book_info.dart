@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_app/domain/entities/book.dart';
-import 'package:flutter_app/ui/widgets/book_genre.dart';
+import 'package:flutter_app/ui/widgets/book/book_genre.dart';
 
 class BookInfo extends StatelessWidget {
   final String name;
@@ -34,7 +34,12 @@ class BookInfo extends StatelessWidget {
       child: Column(
         spacing: 2,
         crossAxisAlignment: CrossAxisAlignment.start,
-        children: [_name(), _author(), _genres(), _description()],
+        children: [
+          _name(),
+          _author(),
+          if (genres.isNotEmpty) _genres(),
+          _description(),
+        ],
       ),
     );
   }

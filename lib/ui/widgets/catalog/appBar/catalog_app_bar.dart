@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_app/ui/widgets/catalog_app_bar_title.dart';
+import 'package:flutter_app/ui/widgets/catalog/appBar/catalog_app_bar_title.dart';
 
 class CatalogAppBar extends AppBar {
   CatalogAppBar({

@@ -99,3 +99,5 @@ app.*.map.json
 
 .direnv/
 nohup.out
+*.g.dart
+*.freezed.dart

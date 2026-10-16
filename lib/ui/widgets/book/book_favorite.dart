@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_app/data/store/user_store.dart';
+import 'package:flutter_app/ui/view/user_session.dart';
 import 'package:provider/provider.dart';
 
 class BookFavorite extends StatelessWidget {
@@ -18,10 +18,10 @@ class BookFavorite extends StatelessWidget {
         radius: 14,
         backgroundColor: Colors.white,
         child: IconButton(
-          onPressed: () => context.read<UserStore>().toggleLike(bookId),
+          onPressed: () => _onPressed(context),
           padding: const EdgeInsets.all(0),
-          icon: Selector<UserStore, bool>(
-            selector: (_, userStore) => userStore.isLiked(bookId),
+          icon: Selector<UserSession, bool>(
+            selector: (_, userSession) => userSession.isLikedBook(bookId),
             builder: (_, isLike, _) => Icon(
               isLike ? Icons.favorite : Icons.favorite_border,
               color: isLike ? Colors.red : Colors.grey,
@@ -31,5 +31,16 @@ class BookFavorite extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  void _onPressed(BuildContext context) {
+    final userSession = context.read<UserSession>();
+    if (userSession.isBusy) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text("Слишком быстро, подождите немного...")),
+      );
+    }
+
+    userSession.toggleLike(bookId);
   }
 }

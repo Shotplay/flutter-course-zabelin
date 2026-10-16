@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_app/data/store/books_store.dart';
-import 'package:flutter_app/data/store/user_store.dart';
+import 'package:flutter_app/ui/view/user_session.dart';
+import 'package:flutter_app/ui/view/books_view_model.dart';
 import 'package:flutter_app/domain/entities/book.dart';
-import 'package:flutter_app/ui/widgets/book_card.dart';
+import 'package:flutter_app/ui/widgets/book/book_card.dart';
 import 'package:provider/provider.dart';
 
 class BookList extends StatelessWidget {
@@ -13,19 +13,25 @@ class BookList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (isLikesVisible) {
-      final likes = context.select<UserStore, Set<String>>((s) => s.likes);
-      if (likes.isEmpty) return notFound();
+      return Selector<UserSession, Set<String>>(
+        selector: (_, userSession) => userSession.likes,
+        builder: (_, likes, _) {
+          if (likes.isEmpty) return notFound();
 
-      final booksStore = context.read<BooksStore>();
-      final liked = likes
-          .where((id) => booksStore.has(id))
-          .map((id) => booksStore.getBook(id)!)
-          .toList();
-
-      return list(liked);
+          final booksVM = context.read<BooksViewModel>();
+          final liked = likes
+              .where((id) => booksVM.hasBook(id))
+              .map((id) => booksVM.getBook(id)!)
+              .toList();
+          return list(liked);
+        },
+      );
     }
 
-    return list(context.read<BooksStore>().books.values.toList());
+    return Selector<BooksViewModel, List<BookItem>>(
+      selector: (_, booksVM) => booksVM.toListValues(),
+      builder: (_, books, _) => list(books),
+    );
   }
 
   Widget list(List<BookItem> books) {
