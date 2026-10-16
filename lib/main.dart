@@ -32,9 +32,8 @@ class App extends StatelessWidget {
       child: MaterialApp(
         debugShowCheckedModeBanner: true,
         theme: ThemeData(fontFamily: "Inter"),
-        home: Builder(
-          builder: (context) {
-            final userSession = context.watch<UserSession>();
+        home: Consumer<UserSession>(
+          builder: (_, userSession, _) {
             if (userSession.state == UserSessionState.loading) {
               return Scaffold(body: SafeArea(child: Loading()));
             }
