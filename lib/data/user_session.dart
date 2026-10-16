@@ -12,11 +12,18 @@ class UserSession extends ChangeNotifier {
 
   UserSession({required this.store});
 
+  @override
+  void dispose() {
+    _state = UserSessionState.disposed;
+    super.dispose();
+  }
+
   User get user => _user;
   Set<String> get likes => Set.unmodifiable(_user.likedBooks);
   UserSessionState get state => _state;
   bool get isBusy => _state != UserSessionState.none;
   bool get isLoaded => _isLoaded;
+  bool get isDisposed => _state == UserSessionState.disposed;
   String? get error => _error;
 
   String get userId => _user.id;
@@ -44,8 +51,10 @@ class UserSession extends ChangeNotifier {
       _error = e.toString();
       return false;
     } finally {
-      _state = UserSessionState.none;
-      notifyListeners();
+      if (!isDisposed) {
+        _state = UserSessionState.none;
+        notifyListeners();
+      }
     }
   }
 
@@ -64,8 +73,10 @@ class UserSession extends ChangeNotifier {
       _error = e.toString();
       return false;
     } finally {
-      _state = UserSessionState.none;
-      notifyListeners();
+      if (!isDisposed) {
+        _state = UserSessionState.none;
+        notifyListeners();
+      }
     }
   }
 }

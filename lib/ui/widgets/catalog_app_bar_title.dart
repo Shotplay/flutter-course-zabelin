@@ -61,28 +61,14 @@ class CatalogAppBarTitle extends StatelessWidget {
     return Builder(
       builder: (context) => CatalogAppBarButton(
         title: "Обновить",
-        onTap: () async {
+        onTap: () {
           ScaffoldMessenger.of(
             context,
           ).showSnackBar(const SnackBar(content: Text("Обновляю...")));
 
           final userSession = context.read<UserSession>();
-          final successes = await Future.wait([
-            context.read<BooksViewModel>().load(),
-            userSession.load(userSession.userId),
-          ]);
 
-          if (!context.mounted) return;
-          ScaffoldMessenger.of(context).clearSnackBars();
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: Text(
-                successes.every((b) => b) && successes[1]
-                    ? "Успешно обновлено"
-                    : "Не удалось обновить",
-              ),
-            ),
-          );
+          userSession.load(userSession.userId);
         },
         backgroundColor: Colors.white,
         icon: Icons.refresh,

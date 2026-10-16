@@ -12,10 +12,17 @@ class BooksViewModel extends ChangeNotifier {
 
   BooksViewModel({required this.store});
 
+  @override
+  void dispose() {
+    _state = BooksViewModelState.disposed;
+    super.dispose();
+  }
+
   BookItemMap get books => Map.unmodifiable(_books);
   BooksViewModelState get state => _state;
   bool get isBusy => _state != BooksViewModelState.none;
   bool get isLoaded => _isLoaded;
+  bool get isDisposed => _state == BooksViewModelState.disposed;
   String? get error => _error;
   int get count => _books.length;
 
@@ -40,8 +47,10 @@ class BooksViewModel extends ChangeNotifier {
       _error = e.toString();
       return false;
     } finally {
-      _state = BooksViewModelState.none;
-      notifyListeners();
+      if (!isDisposed) {
+        _state = BooksViewModelState.none;
+        notifyListeners();
+      }
     }
   }
 
@@ -59,8 +68,10 @@ class BooksViewModel extends ChangeNotifier {
       _error = e.toString();
       return false;
     } finally {
-      _state = BooksViewModelState.none;
-      notifyListeners();
+      if (!isDisposed) {
+        _state = BooksViewModelState.none;
+        notifyListeners();
+      }
     }
   }
 }

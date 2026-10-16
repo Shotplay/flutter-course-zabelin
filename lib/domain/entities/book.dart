@@ -5,7 +5,7 @@ part 'book.g.dart';
 
 typedef BookItemMap = Map<String, BookItem>;
 
-enum BooksViewModelState { none, loading, addingBook }
+enum BooksViewModelState { none, loading, addingBook, disposed }
 
 @freezed
 abstract class BookItem with _$BookItem {

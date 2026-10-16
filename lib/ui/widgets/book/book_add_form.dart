@@ -1,4 +1,3 @@
-import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_app/data/view/books_view_model.dart';
@@ -45,7 +44,6 @@ class _BookAddFormState extends State<BookAddForm> {
               "Путь до превью",
               _previewController,
               hintText: "assets/images/dorian_gray.png",
-              validator: _validatePreview,
             ),
             _textField(
               "Название книги",
@@ -139,16 +137,6 @@ class _BookAddFormState extends State<BookAddForm> {
     _yearController.clear();
     _genresController.clear();
     _descriptionController.clear();
-  }
-
-  String? _validatePreview(String? value) {
-    if (value == null || value == "") return null;
-
-    if (!File(value).existsSync()) {
-      return "Такого превью нет";
-    }
-
-    return null;
   }
 
   String? _validateName(String? value) {

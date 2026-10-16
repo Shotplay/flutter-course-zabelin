@@ -38,27 +38,25 @@ class BookPreview extends StatelessWidget {
   }
 
   Widget _image() {
-    if (previewSrc == "") {
-      return Builder(
-        builder: (context) {
-          final book = context.read<BooksViewModel>().getBook(bookId);
-          if (book == null) return const Placeholder();
+    return Image.asset(
+      previewSrc,
+      fit: BoxFit.cover,
+      errorBuilder: (context, _, _) {
+        final book = context.read<BooksViewModel>().getBook(bookId);
+        if (book == null) return const Placeholder();
 
-          return DecoratedBox(
-            decoration: BoxDecoration(
-              color: ColorUtils.stringToColor(book.name[0]),
+        return DecoratedBox(
+          decoration: BoxDecoration(
+            color: ColorUtils.stringToColor(book.name[0]),
+          ),
+          child: Center(
+            child: Text(
+              book.name[0],
+              style: const TextStyle(fontSize: 32, color: Colors.white),
             ),
-            child: Center(
-              child: Text(
-                book.name[0],
-                style: const TextStyle(fontSize: 32, color: Colors.white),
-              ),
-            ),
-          );
-        },
-      );
-    }
-
-    return Image.asset(previewSrc, fit: BoxFit.cover);
+          ),
+        );
+      },
+    );
   }
 }
