@@ -1,6 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_app/ui/widgets/book_list.dart';
-import 'package:flutter_app/ui/widgets/catalog_app_bar.dart';
+import 'package:flutter_app/ui/view/user_session.dart';
+import 'package:flutter_app/ui/view/books_view_model.dart';
+import 'package:flutter_app/domain/entities/book.dart';
+import 'package:flutter_app/ui/widgets/book/book_list.dart';
+import 'package:flutter_app/ui/widgets/catalog/appBar/catalog_app_bar.dart';
+import 'package:flutter_app/ui/widgets/loading.dart';
+import 'package:provider/provider.dart';
 
 class CatalogScreen extends StatefulWidget {
   const CatalogScreen({super.key});
@@ -15,6 +20,8 @@ class _CatalogScreenState extends State<CatalogScreen> {
   @override
   void initState() {
     super.initState();
+
+    context.read<BooksViewModel>().load();
   }
 
   void _onLikeVisibleTap() {
@@ -30,9 +37,14 @@ class _CatalogScreenState extends State<CatalogScreen> {
         isLikesVisible: _isLikesVisible,
       ),
       body: SafeArea(
-        child: DecoratedBox(
-          decoration: const BoxDecoration(color: Color(0xFFF2F2F2)),
-          child: BookList(isLikesVisible: _isLikesVisible),
+        child: Consumer2<UserSession, BooksViewModel>(
+          builder: (_, userSession, booksVM, _) {
+            if (booksVM.state == BooksViewModelState.loading) {
+              return Loading();
+            }
+
+            return BookList(isLikesVisible: _isLikesVisible);
+          },
         ),
       ),
     );
