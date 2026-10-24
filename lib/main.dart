@@ -1,16 +1,19 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_app/data/providers/app_provider.dart';
-import 'package:flutter_app/data/providers/catalog_provider.dart';
-import 'package:flutter_app/data/store/books_store.dart';
+import 'package:flutter_app/data/states/user_view_model.dart';
 import 'package:flutter_app/data/store/user_store.dart';
-import 'package:flutter_app/ui/view/user_session.dart';
-import 'package:flutter_app/domain/entities/user.dart';
-import 'package:flutter_app/ui/screens/catalog_screen.dart';
-import 'package:flutter_app/ui/screens/user_choice_screen.dart';
-import 'package:flutter_app/ui/widgets/loading.dart';
+import 'package:flutter_app/firebase_options.dart';
+import 'package:flutter_app/router/app_router.dart';
+import 'package:flutter_app/ui/theme/app_theme.dart';
 import 'package:provider/provider.dart';
 
-void main() {
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+  
+  FirebaseFirestore.instance.settings = Settings(persistenceEnabled: false);
+
   runApp(const App());
 }
 
@@ -19,31 +22,19 @@ class App extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var userStore = UserStore();
-    var booksStore = BooksStore();
-
-    var catalogScreen = CatalogProvider(
-      booksStore: booksStore,
-      child: CatalogScreen(),
-    );
-
-    return AppProvider(
-      userStore: userStore,
-      child: MaterialApp(
-        debugShowCheckedModeBanner: true,
-        theme: ThemeData(fontFamily: "Inter"),
-        home: Consumer<UserSession>(
-          builder: (_, userSession, _) {
-            if (userSession.state == UserSessionState.loading) {
-              return Scaffold(body: SafeArea(child: Loading()));
-            }
-
-            if (!userSession.isLoaded) {
-              return UserChoiceScreen();
-            }
-
-            return catalogScreen;
-          },
+    return MultiProvider(
+      providers: [
+        Provider(create: (_) => UserStore()),
+        ChangeNotifierProvider(
+          create: (context) => UserViewModel(store: context.read<UserStore>()),
+        ),
+      ],
+      child: Builder(
+        builder: (context) => MaterialApp.router(
+          debugShowCheckedModeBanner: true,
+          theme: AppTheme.light,
+          darkTheme: AppTheme.dark,
+          routerConfig: AppRouter(context).router,
         ),
       ),
     );

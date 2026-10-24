@@ -1,80 +1,84 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_app/domain/entities/book.dart';
-import 'package:flutter_app/ui/widgets/book/book_genre.dart';
+import 'package:flutter_app/domain/value_object/genre.dart';
+import 'book_genre.dart';
 
 class BookInfo extends StatelessWidget {
-  final String name;
-  final String author;
+  final String title;
+  final String subtitle;
   final int year;
-  final Set<String> genres;
-  final String? description;
+  final Set<Genre> genres;
+  final int? titleMaxLines;
 
   const BookInfo({
     super.key,
-    required this.name,
-    required this.author,
+    required this.title,
+    required this.subtitle,
     required this.year,
     required this.genres,
-    required this.description,
+    this.titleMaxLines,
   });
-
-  factory BookInfo.fromBook(BookItem book) {
-    return BookInfo(
-      name: book.name,
-      author: book.author,
-      year: book.year,
-      genres: book.genres,
-      description: book.description,
-    );
-  }
 
   @override
   Widget build(BuildContext context) {
-    return Expanded(
-      child: Column(
-        spacing: 2,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          _name(),
-          _author(),
-          if (genres.isNotEmpty) _genres(),
-          _description(),
-        ],
-      ),
+    return Column(
+      spacing: 6,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        _Title(title: title, maxLines: titleMaxLines),
+        _SubTitle(subtitle: subtitle, year: year),
+        if (genres.isNotEmpty) _Genres(genres: genres),
+      ],
     );
   }
+}
 
-  Text _name() {
+class _Title extends StatelessWidget {
+  final String title;
+  final int? maxLines;
+
+  const _Title({required this.title, required this.maxLines});
+
+  @override
+  Widget build(BuildContext context) {
     return Text(
-      name,
-      maxLines: 2,
-      overflow: TextOverflow.ellipsis,
-      style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 16),
+      title,
+      maxLines: maxLines,
+      softWrap: true,
+      overflow: maxLines != null ? TextOverflow.ellipsis : TextOverflow.visible,
+      style: Theme.of(context).textTheme.headlineMedium!.copyWith(fontSize: 18),
     );
   }
+}
 
-  Text _author() {
+class _SubTitle extends StatelessWidget {
+  final String subtitle;
+  final int year;
+
+  const _SubTitle({required this.subtitle, required this.year});
+
+  @override
+  Widget build(BuildContext context) {
     return Text(
-      "$author · $year",
-      style: const TextStyle(fontWeight: FontWeight.w400, fontSize: 13),
+      "$subtitle · $year г.",
+      style: Theme.of(context).textTheme.bodyLarge,
     );
   }
+}
 
-  Widget _description() {
-    return Text(
-      description ?? "У книги пока не добавлено описание...",
-      maxLines: 3,
-      overflow: TextOverflow.ellipsis,
-      style: const TextStyle(fontWeight: FontWeight.w400, fontSize: 14),
-    );
-  }
+class _Genres extends StatelessWidget {
+  final Set<Genre> genres;
 
-  Widget _genres() {
+  const _Genres({required this.genres});
+
+  @override
+  Widget build(BuildContext context) {
+    if (genres.isEmpty) return const SizedBox.shrink();
+
     return SingleChildScrollView(
       scrollDirection: Axis.horizontal,
       child: Row(
-        spacing: 9,
-        children: genres.map((g) => BookGenre(g)).toList(),
+        spacing: 6,
+        children: genres.map((g) => BookGenre(genre: g)).toList(),
       ),
     );
   }

@@ -1,42 +1,30 @@
-import 'dart:convert';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter_app/domain/entity/book.dart';
 
-import 'package:flutter/foundation.dart';
-import 'package:flutter_app/data/store/url.dart';
-import 'package:flutter_app/domain/entities/book.dart';
-import 'package:flutter_app/utils/http.dart';
-import 'package:http/http.dart' as http;
-
-class BooksStore extends ChangeNotifier {
-  static final url = "$baseURL/books";
-
-  bool _isUpdating = false; // prevent race condition
-
+class BooksStore {
   BooksStore();
 
-  Future<List<BookItem>> fetchBooks() async {
-    final resp = await http.get(
-      Uri.parse(url),
-      headers: {"Content-Type": "application/json"},
-    );
+  final _db = FirebaseFirestore.instance;
 
-    final decoded = jsonDecode(resp.body) as List<dynamic>;
-    return decoded.map((e) => BookItem.fromJson(e)).toList();
+  CollectionReference get _booksRef => _db.collection('books');
+
+  Future<List<BookItem>> fetchBooks() async {
+    final snapshot = await _booksRef.get();
+
+    if (snapshot.docs.isEmpty) {
+      return const [];
+    }
+
+    return snapshot.docs
+        .map(
+          (doc) => BookItem(id: doc.id, data: BookItemData.fromFirestore(doc)),
+        )
+        .toList();
   }
 
-  Future<bool> addBook(BookItem book) async {
-    if (_isUpdating) return false;
-    _isUpdating = true;
-
-    try {
-      final resp = await http.post(
-        Uri.parse(url),
-        headers: {"Content-Type": "application/json"},
-        body: jsonEncode(book),
-      );
-
-      return resp.statusCode.isSuccess;
-    } finally {
-      _isUpdating = false;
-    }
+  Future<BookItem> addBook(BookItemData book, String? id) async {
+    final doc = _booksRef.doc(id);
+    await doc.set(book.toJson());
+    return BookItem(id: doc.id, data: book);
   }
 }

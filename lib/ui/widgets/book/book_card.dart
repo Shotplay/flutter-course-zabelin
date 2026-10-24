@@ -1,36 +1,46 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_app/domain/entities/book.dart';
-import 'package:flutter_app/ui/widgets/book/book_info.dart';
-import 'package:flutter_app/ui/widgets/book/book_preview.dart';
+import 'package:flutter_app/domain/entity/book.dart';
+import 'package:flutter_app/router/app_router.dart';
+import 'package:flutter_app/ui/theme/brand_colors.dart';
+import 'book_info.dart';
+import 'book_preview.dart';
 
 class BookCard extends StatelessWidget {
   final BookItem book;
 
-  const BookCard({
-    super.key,
-    required this.book,
-  });
+  const BookCard({super.key, required this.book});
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      width: 358,
-      decoration: const BoxDecoration(
-        border: BoxBorder.fromBorderSide(
-          BorderSide(color: Color(0xFFF6F4F0), width: 1),
-        ),
+    return Card(
+      color: context.brandColors.cardBackgroundColor,
+      shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.all(Radius.circular(16)),
-        color: Colors.white,
       ),
-      child: Padding(
-        padding: const EdgeInsets.all(12),
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          spacing: 12,
-          children: [
-            BookPreview(bookId: book.id, previewSrc: book.previewSrc),
-            BookInfo.fromBook(book),
-          ],
+      child: InkWell(
+        onTap: () => BookInfoRoute(bookId: book.id).go(context),
+        child: Padding(
+          padding: const EdgeInsets.all(12),
+          child: Row(
+            spacing: 12,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              BookPreview(
+                bookId: book.id,
+                titleInitial: book.data.title[0],
+                src: book.data.preview,
+              ),
+              Expanded(
+                child: BookInfo(
+                  title: book.data.title,
+                  subtitle: book.data.subtitle,
+                  year: book.data.year,
+                  genres: book.data.genres,
+                  titleMaxLines: 2,
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );

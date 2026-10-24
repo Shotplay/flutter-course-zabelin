@@ -1,22 +1,29 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_app/ui/theme/brand_colors.dart';
+import 'package:flutter_app/utils/theme.dart';
+import '../../../domain/value_object/genre.dart';
 
 class BookGenre extends StatelessWidget {
-  final String genre;
+  final Genre genre;
 
-  const BookGenre(this.genre, {super.key});
+  const BookGenre({super.key, required this.genre});
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
-      decoration: const BoxDecoration(
-        color: Color(0xFFE6F0EF),
-        border: Border.fromBorderSide(BorderSide(color: Color(0xFFE6F0EF), width: 1)),
-        borderRadius: BorderRadius.all(Radius.circular(10)),
+    return DecoratedBox(
+      decoration: BoxDecoration(
+        borderRadius: const BorderRadius.all(Radius.circular(10)),
+        color: context.brandColors.borderSelected,
       ),
-      child: Text(
-        genre,
-        style: const TextStyle(fontWeight: FontWeight.w500, fontSize: 11),
+      child: Padding(
+        padding: EdgeInsets.symmetric(vertical: 3, horizontal: 8),
+        child: Text(
+          genre.toString(),
+          style: context.theme.textTheme.bodyLarge!.copyWith(
+            color: context.brandColors.primary,
+            fontWeight: FontWeight.w500,
+          ),
+        ),
       ),
     );
   }
