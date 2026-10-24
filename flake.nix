@@ -21,15 +21,18 @@
       {
         devShells.default = pkgs.mkShell {
           env = {
-            JAVA_HOME="${pkgs.jdk17}/lib/openjdk";
+            JAVA_HOME = "${pkgs.jdk17}/lib/openjdk";
           };
 
           packages = with pkgs; [
             flutter
             jdk17
+            firebase-tools
           ];
 
           shellHook = ''
+            export PATH="$PATH":"$HOME/.pub-cache/bin"
+
             flutter config --jdk-dir "${pkgs.jdk17}/lib/openjdk"
           '';
         };

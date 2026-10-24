@@ -1,16 +1,30 @@
-import 'package:flutter/foundation.dart';
-import 'package:flutter_app/domain/entities/book.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter_app/domain/entity/book.dart';
 
-class BooksStore extends ChangeNotifier {
-  final BookItemMap _books;
+class BooksStore {
+  BooksStore();
 
-  BooksStore({required BookItemMap books}) : _books = {...books};
+  final _db = FirebaseFirestore.instance;
 
-  BookItemMap get books => Map.unmodifiable(_books);
-  int get booksCount => _books.length;
-  bool has(String bookId) => _books.containsKey(bookId);
+  CollectionReference get _booksRef => _db.collection('books');
 
-  BookItem? getBook(String bookId) => _books[bookId];
-  void addBook(BookItem book) => _books[book.id] = book;
-  BookItem? removeBook(String bookId) => _books.remove(bookId);
+  Future<List<BookItem>> fetchBooks() async {
+    final snapshot = await _booksRef.get();
+
+    if (snapshot.docs.isEmpty) {
+      return const [];
+    }
+
+    return snapshot.docs
+        .map(
+          (doc) => BookItem(id: doc.id, data: BookItemData.fromFirestore(doc)),
+        )
+        .toList();
+  }
+
+  Future<BookItem> addBook(BookItemData book, String? id) async {
+    final doc = _booksRef.doc(id);
+    await doc.set(book.toJson());
+    return BookItem(id: doc.id, data: book);
+  }
 }

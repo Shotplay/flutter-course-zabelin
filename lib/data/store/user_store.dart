@@ -1,20 +1,23 @@
-import 'package:flutter/foundation.dart';
-import 'package:flutter_app/domain/entities/user.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter_app/domain/entity/user.dart';
 
-class UserStore extends ChangeNotifier {
-  User _user;
+class UserStore {
+  UserStore();
 
-  UserStore({required User user}) : _user = user;
+  final _db = FirebaseFirestore.instance;
 
-  Set<String> get likes => Set.unmodifiable(_user.likes);
-  int get likesCount => _user.likes.length;
-  bool isLiked(String bookId) => _user.likes.contains(bookId);
-  
-  void toggleLike(String bookId) {
-    final likes = {..._user.likes};
-    if (!likes.add(bookId)) likes.remove(bookId);
-    _user = _user.copyWith(likes: likes);
+  CollectionReference get _usersRef => _db.collection('users');
 
-    notifyListeners();
+  Future<UserData> fetchUserData(String id) async {
+    final snapshot = await _usersRef.doc(id).get();
+    return UserData.fromFirestore(snapshot);
+  }
+
+  Future<void> createUserData(String id) async {
+    await _usersRef.doc(id).set(UserData.zero.toJson());
+  }
+
+  Future<void> updateUserData(String id, UserData data) async {
+    await _usersRef.doc(id).update(data.toJson());
   }
 }

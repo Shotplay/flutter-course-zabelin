@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "837121289317",
+    "project_id": "flutter-innopolis",
+    "storage_bucket": "flutter-innopolis.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:837121289317:android:6660ef9dbfdef52f74ea8c",
+        "android_client_info": {
+          "package_name": "com.example.flutter_app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBqGzblNCkbD4zH_a39S3KFAMChQPd6bHk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
