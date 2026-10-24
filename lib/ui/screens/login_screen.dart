@@ -137,22 +137,7 @@ class _LoginButton extends StatelessWidget {
         if (!formKey.currentState!.validate()) return;
 
         final user = context.read<UserViewModel>();
-        final success = await user.login(
-          emailController.text,
-          passwordController.text,
-        );
-
-        if (!context.mounted) return;
-
-        if (success) return CatalogRoute().go(context);
-
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: const Text(
-              "Произошла ошибка входа, проверьте подключение к интернету, корректность введенных данных или попробуйте позже",
-            ),
-          ),
-        );
+        await user.login(emailController.text, passwordController.text);
       },
     );
   }

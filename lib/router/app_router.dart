@@ -29,6 +29,7 @@ class AppRouter {
   GoRouter get router {
     return GoRouter(
       initialLocation: '/catalog',
+      refreshListenable: context.read<UserViewModel>(),
       routes: $appRoutes,
       redirect: (context, state) {
         final userVM = context.read<UserViewModel>();

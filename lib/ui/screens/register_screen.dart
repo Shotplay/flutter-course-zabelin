@@ -148,23 +148,7 @@ class _RegisterButton extends StatelessWidget {
 
         setHasError(false);
         final user = context.read<UserViewModel>();
-        final success = await user.register(
-          emailController.text,
-          passwordController.text,
-        );
-
-        if (!context.mounted) return;
-
-        if (success) return CatalogRoute().go(context);
-        
-        setHasError(true);
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: const Text(
-              "Произошла ошибка регистрации, проверьте подключение к интернету или попробуйте позже",
-            ),
-          ),
-        );
+        await user.register(emailController.text, passwordController.text);
       },
     );
   }

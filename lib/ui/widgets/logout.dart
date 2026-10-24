@@ -18,7 +18,7 @@ class Logout extends StatelessWidget {
       child: IconButton(
         icon: const Icon(Icons.logout),
         padding: const EdgeInsets.all(0),
-        onPressed: context.read<UserViewModel>().logout,
+        onPressed: () => context.read<UserViewModel>().logout(null),
         iconSize: 28,
       ),
     );

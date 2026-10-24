@@ -13,7 +13,9 @@ final class UserInitial extends UserState {
 }
 
 final class UserUnauthorized extends UserState {
-  const UserUnauthorized();
+  final Object? error;
+
+  const UserUnauthorized({this.error});
 }
 
 final class UserLoading extends UserState {
@@ -124,7 +126,7 @@ class UserViewModel extends ChangeNotifier {
       _setState(UserLoaded(await _fetchUser(uid, cred.user!.email!)));
       return true;
     } catch (e) {
-      logout();
+      logout(e);
       return false;
     }
   }
@@ -144,14 +146,14 @@ class UserViewModel extends ChangeNotifier {
       _setState(UserLoaded(await _fetchUser(uid, cred.user!.email!)));
       return true;
     } catch (e) {
-      logout();
+      logout(e);
       return false;
     }
   }
 
-  Future<void> logout() async {
+  Future<void> logout(Object? error) async {
     await FirebaseAuth.instance.signOut();
-    _setState(UserUnauthorized());
+    _setState(UserUnauthorized(error: error));
   }
 
   Future<User> _fetchUser(String uid, String email) async {
