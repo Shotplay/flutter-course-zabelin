@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_app/data/states/user_view_model.dart';
+import 'package:flutter_app/data/bloc/user_bloc.dart';
+import 'package:flutter_app/domain/entity/auth.dart';
+import 'package:flutter_app/domain/entity/user.dart';
 import 'package:flutter_app/ui/theme/brand_colors.dart';
-import 'package:provider/provider.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class BookFavorite extends StatelessWidget {
   final String bookId;
@@ -34,31 +36,23 @@ class BookFavorite extends StatelessWidget {
       ),
       child: IconButton(
         padding: const EdgeInsets.all(0),
-        icon: Selector<UserViewModel, bool>(
-          selector: (_, userVM) => switch (userVM.state) {
-            (UserLoaded(:final user) || UserUpdating(:final user)) =>
-              user.data.likedBooks.contains(bookId),
+        icon: BlocSelector<UserBloc, UserState, bool>(
+          selector: (s) => switch (s) {
+            UserLoadedState(:final user) => user.likes.contains(bookId),
             _ => false,
           },
-          builder: (_, isLike, _) => Icon(
+          builder: (_, isLike) => Icon(
             isLike ? Icons.favorite : Icons.favorite_border,
             color: isLike ? Colors.red : null,
             size: widgetSize,
           ),
         ),
-        onPressed: () async {
-          final success = await context.read<UserViewModel>().toggleBookLike(
+        onPressed: () => context.read<UserBloc>().add(
+          UserToggleBookLikeEvent(
+            context.read<AuthRepository>().userId!,
             bookId,
-          );
-
-          if (success || !context.mounted) return;
-
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(
-              content: Text("Слишком быстро, подождите немного..."),
-            ),
-          );
-        },
+          ),
+        ),
       ),
     );
   }

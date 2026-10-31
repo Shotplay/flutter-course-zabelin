@@ -1,16 +1,25 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_app/data/states/books_view_model.dart';
-import 'package:flutter_app/data/states/catalog_ui_state.dart';
-import 'package:flutter_app/data/states/user_view_model.dart';
-import 'package:flutter_app/data/store/books_store.dart';
+import 'package:flutter_app/data/bloc/auth_bloc.dart';
+import 'package:flutter_app/data/bloc/books_bloc.dart';
+import 'package:flutter_app/data/bloc/user_bloc.dart';
+import 'package:flutter_app/data/cubit/catalog_cubit.dart';
+import 'package:flutter_app/data/store/books_repository.dart';
+import 'package:flutter_app/domain/entity/auth.dart';
+import 'package:flutter_app/domain/entity/book.dart';
+import 'package:flutter_app/domain/entity/user.dart';
+import 'package:flutter_app/domain/usecase/book_add_use_case.dart';
+import 'package:flutter_app/domain/usecase/book_load_use_case.dart';
+import 'package:flutter_app/domain/usecase/books_fetch_use_case.dart';
+import 'package:flutter_app/domain/usecase/books_load_use_case.dart';
 import 'package:flutter_app/ui/screens/book_add_screen.dart';
 import 'package:flutter_app/ui/screens/book_info_screen.dart';
 import 'package:flutter_app/ui/screens/catalog_screen.dart';
 import 'package:flutter_app/ui/screens/login_screen.dart';
 import 'package:flutter_app/ui/screens/register_screen.dart';
 import 'package:flutter_app/ui/screens/splash_screen.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
-import 'package:provider/provider.dart';
+import 'package:bloc_listenable/bloc_listenable.dart';
 
 part 'app_router.g.dart';
 part 'login_route.dart';
@@ -29,27 +38,32 @@ class AppRouter {
   GoRouter get router {
     return GoRouter(
       initialLocation: '/catalog',
-      refreshListenable: context.read<UserViewModel>(),
       routes: $appRoutes,
+      refreshListenable: context.read<AuthBloc>().asListenable(),
       redirect: (context, state) {
-        final userVM = context.read<UserViewModel>();
+        final authBloc = context.read<AuthBloc>();
+        final userBloc = context.read<UserBloc>();
         final isLoggingIn = state.matchedLocation == '/login';
         final isRegisterIn = state.matchedLocation == '/register';
         final isSplash = state.matchedLocation == '/splash';
         final isAuthScreen = isLoggingIn || isRegisterIn;
 
-        if (userVM.state is UserLoading) {
+        if (authBloc.state is AuthUnauthenticatedState ||
+            authBloc.state is AuthFailureState) {
+          return isAuthScreen ? null : const LoginRoute().location;
+        }
+
+        if (authBloc.state is AuthLoadingState) {
           return const SplashRoute().location;
         }
 
-        if (!userVM.isLoaded && userVM.state is! UserError && !isAuthScreen) {
-          return const LoginRoute().location;
+        if (userBloc.state is UserInitialState &&
+            authBloc.state is AuthAuthenticatedState) {
+          userBloc.add(UserLoadEvent(context.read<AuthRepository>().userId!));
         }
 
-        if (isSplash || (isAuthScreen && userVM.isLoaded)) {
-          return (userVM.isLoaded || userVM.state is UserError)
-              ? const CatalogRoute().location
-              : const LoginRoute().location;
+        if (isSplash || isAuthScreen) {
+          return const CatalogRoute().location;
         }
 
         return null;

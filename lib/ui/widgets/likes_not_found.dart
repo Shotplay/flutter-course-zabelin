@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_app/data/states/catalog_ui_state.dart';
+import 'package:flutter_app/data/cubit/catalog_cubit.dart';
 import 'package:flutter_app/ui/theme/brand_colors.dart';
 import 'package:flutter_app/ui/widgets/show_all_books_button.dart';
 import 'package:flutter_app/utils/theme.dart';
-import 'package:provider/provider.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class LikesNotFound extends StatelessWidget {
   const LikesNotFound({super.key});
@@ -26,7 +26,7 @@ class LikesNotFound extends StatelessWidget {
               const _Body(),
               ShowAllBooksButton(
                 onShowAllBooks: context
-                    .read<CatalogUiState>()
+                    .read<CatalogCubit>()
                     .toggleActiveLikesFilter,
               ),
             ],

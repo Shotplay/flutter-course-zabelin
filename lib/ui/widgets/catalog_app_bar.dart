@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_app/data/states/books_view_model.dart';
-import 'package:flutter_app/data/states/catalog_ui_state.dart';
-import 'package:flutter_app/data/states/user_view_model.dart';
+import 'package:flutter_app/data/bloc/books_bloc.dart';
+import 'package:flutter_app/data/bloc/user_bloc.dart';
+import 'package:flutter_app/data/cubit/catalog_cubit.dart';
+import 'package:flutter_app/domain/entity/auth.dart';
+import 'package:flutter_app/domain/entity/book.dart';
+import 'package:flutter_app/domain/entity/catalog.dart';
+import 'package:flutter_app/domain/entity/user.dart';
 import 'package:flutter_app/router/app_router.dart';
 import 'package:flutter_app/ui/theme/brand_colors.dart';
 import 'package:flutter_app/ui/widgets/app_bar_icon_button.dart';
@@ -9,7 +13,7 @@ import 'package:flutter_app/ui/widgets/likes_filter_button.dart';
 import 'package:flutter_app/ui/widgets/logout.dart';
 import 'package:flutter_app/ui/widgets/refresh_button.dart';
 import 'package:flutter_app/utils/theme.dart';
-import 'package:provider/provider.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class CatalogAppBar extends AppBar {
   CatalogAppBar({super.key, required BuildContext context})
@@ -74,14 +78,15 @@ class _Stats extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final booksVM = context.watch<BooksViewModel>();
-    final userVM = context.watch<UserViewModel>();
+    final booksBloc = context.watch<BooksBloc>();
+    final userBloc = context.watch<UserBloc>();
 
-    return switch ((booksVM.state, userVM.state)) {
-      (BooksLoaded(:final books), UserLoaded(:final user)) => Text(
-        "В каталоге: ${books.length} · В избранном: ${user.data.likedBooks.length}",
+    return switch ((booksBloc.state, userBloc.state)) {
+      (BooksLoadedState(:final books), UserLoadedState(:final user)) => Text(
+        "В каталоге: ${books.length} · В избранном: ${user.likes.length}",
       ),
-      (BooksError(), _) || (_, UserError()) => const Text("Нет данных"),
+      (BooksFailureState(), _) ||
+      (_, UserFailureState()) => const Text("Нет данных"),
       _ => const Text("Загружаю..."),
     };
   }
@@ -99,16 +104,16 @@ class _Actions extends StatelessWidget {
         children: [
           RefreshButton(
             onRefresh: () {
-              context.read<BooksViewModel>().refresh();
-              context.read<UserViewModel>().refresh();
+              context.read<BooksBloc>().add(const BooksRefreshEvent());
+              context.read<UserBloc>().add(UserRefreshEvent(context.read<AuthRepository>().userId!));
             },
           ),
-          Selector<CatalogUiState, bool>(
-            selector: (_, p) => p.activeLikesFilter,
-            builder: (_, isActive, _) => LikesFilterButton(
+          BlocSelector<CatalogCubit, CatalogState, bool>(
+            selector: (s) => s.activeLikesFilter,
+            builder: (_, isActive) => LikesFilterButton(
               isActive: isActive,
               toggleLikesFilter: context
-                  .read<CatalogUiState>()
+                  .read<CatalogCubit>()
                   .toggleActiveLikesFilter,
             ),
           ),

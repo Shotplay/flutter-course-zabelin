@@ -1,20 +1,26 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_app/data/states/books_view_model.dart';
-import 'package:flutter_app/data/states/catalog_ui_state.dart';
-import 'package:flutter_app/data/states/user_view_model.dart';
+import 'package:flutter_app/data/bloc/books_bloc.dart';
+import 'package:flutter_app/data/bloc/user_bloc.dart';
+import 'package:flutter_app/data/cubit/catalog_cubit.dart';
+import 'package:flutter_app/domain/entity/auth.dart';
 import 'package:flutter_app/domain/entity/book.dart';
+import 'package:flutter_app/domain/entity/catalog.dart';
+import 'package:flutter_app/domain/entity/user.dart';
 import 'package:flutter_app/ui/widgets/book/book_card.dart';
 import 'package:flutter_app/ui/widgets/catalog_app_bar.dart';
 import 'package:flutter_app/ui/widgets/likes_not_found.dart';
 import 'package:flutter_app/ui/widgets/loading.dart';
 import 'package:flutter_app/ui/widgets/wifi_off.dart';
-import 'package:provider/provider.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class CatalogScreen extends StatelessWidget {
   const CatalogScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
+    context.watch<BooksBloc>();
+    context.watch<UserBloc>();
+
     return Scaffold(
       appBar: CatalogAppBar(context: context),
       body: SafeArea(child: _BooksContent()),
@@ -27,19 +33,16 @@ class _BooksContent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final booksVM = context.watch<BooksViewModel>();
-    final userVM = context.watch<UserViewModel>();
+    final booksBloc = context.read<BooksBloc>();
+    final userBloc = context.read<UserBloc>();
 
-    return switch ((booksVM.state, userVM.state)) {
-      (
-        BooksLoaded(:final books) || BooksUpdating(:final books),
-        UserLoaded(:final user) || UserUpdating(:final user),
-      ) =>
-        Selector<CatalogUiState, bool>(
-          selector: (_, p) => p.activeLikesFilter,
-          builder: (context, activeLikesFilter, _) {
+    return switch ((booksBloc.state, userBloc.state)) {
+      (BooksLoadedState(:final books), UserLoadedState(:final user)) =>
+        BlocSelector<CatalogCubit, CatalogState, bool>(
+          selector: (s) => s.activeLikesFilter,
+          builder: (context, activeLikesFilter) {
             if (activeLikesFilter) {
-              final likes = user.data.likedBooks;
+              final likes = user.likes;
 
               if (likes.isEmpty) {
                 return const LikesNotFound();
@@ -56,10 +59,12 @@ class _BooksContent extends StatelessWidget {
             return _BooksList(books: books.values.toList());
           },
         ),
-      (BooksError(), _) || (_, UserError()) => WifiOff(
+      (BooksFailureState(), _) || (_, UserFailureState()) => WifiOff(
         onRefresh: () {
-          booksVM.load();
-          userVM.refresh();
+          booksBloc.add(const BooksRefreshEvent());
+          userBloc.add(
+            UserRefreshEvent(context.read<AuthRepository>().userId!),
+          );
         },
       ),
       _ => const Loading(child: Text("Загружаю каталог прекрасных книг...")),
@@ -68,7 +73,7 @@ class _BooksContent extends StatelessWidget {
 }
 
 class _BooksList extends StatelessWidget {
-  final List<BookItem> books;
+  final List<Book> books;
 
   const _BooksList({required this.books});
 

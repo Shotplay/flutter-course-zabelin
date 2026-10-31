@@ -11,7 +11,6 @@ plugins:
 # packages, and plugins designed to encourage good coding practices.
 analyzer:
   errors:
-    avoid_catches_without_on_clauses: ignore
     avoid_print: ignore
     public_member_api_docs: ignore
   exclude:
@@ -22,6 +21,7 @@ analyzer:
     - windows/**
     - macos/**
     - linux/**
+    - lib_old/**
     - "**/*.g.dart"
     - "**/*.freezed.dart"
 

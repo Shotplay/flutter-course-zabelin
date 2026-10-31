@@ -12,12 +12,34 @@ class BooksShellRoute extends ShellRouteData {
 
   @override
   Widget builder(BuildContext context, GoRouterState state, Widget navigator) {
-    return MultiProvider(
+    return MultiBlocProvider(
       providers: [
-        Provider(create: (_) => BooksStore()),
-        ChangeNotifierProvider(
+        RepositoryProvider<BooksRepository>(
+          create: (_) => BooksFirebaseRepository(),
+        ),
+        RepositoryProvider(
           create: (context) =>
-              BooksViewModel(store: context.read<BooksStore>()),
+              BookAddUseCase(booksRepo: context.read<BooksRepository>()),
+        ),
+        RepositoryProvider(
+          create: (context) =>
+              BookLoadUseCase(booksRepo: context.read<BooksRepository>()),
+        ),
+        RepositoryProvider(
+          create: (context) =>
+              BooksLoadUseCase(booksRepo: context.read<BooksRepository>()),
+        ),
+        RepositoryProvider(
+          create: (context) =>
+              BooksFetchUseCase(booksRepo: context.read<BooksRepository>()),
+        ),
+        BlocProvider(
+          create: (context) => BooksBloc(
+            addBook: context.read<BookAddUseCase>(),
+            bookLoad: context.read<BookLoadUseCase>(),
+            booksLoad: context.read<BooksLoadUseCase>(),
+            booksFetch: context.read<BooksFetchUseCase>(),
+          ),
         ),
       ],
       child: navigator,

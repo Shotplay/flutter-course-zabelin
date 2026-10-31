@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_app/data/states/books_view_model.dart';
-import 'package:flutter_app/domain/entity/book.dart';
+import 'package:flutter_app/data/bloc/books_bloc.dart';
 import 'package:flutter_app/router/app_router.dart';
 import 'package:flutter_app/ui/widgets/book/book_favorite.dart';
 import 'package:flutter_app/ui/widgets/book/book_info.dart';
 import 'package:flutter_app/ui/widgets/book/book_preview.dart';
+import 'package:flutter_app/ui/widgets/loading.dart';
 import 'package:flutter_app/ui/widgets/styled_back_button.dart';
 import 'package:flutter_app/utils/theme.dart';
-import 'package:provider/provider.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class BookInfoScreen extends StatelessWidget {
   final String bookId;
@@ -16,47 +16,50 @@ class BookInfoScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final book = context.select<BooksViewModel, BookItem?>(
-      (p) => p.getBook(bookId),
-    );
-
-    if (book == null) {
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        if (context.mounted) CatalogRoute().go(context);
-      });
-
-      return const SizedBox.shrink();
-    }
-
     return Scaffold(
       appBar: _AppBar(bookId: bookId),
       body: SafeArea(
-        child: SingleChildScrollView(
-          padding: const EdgeInsets.symmetric(horizontal: 16).copyWith(top: 1),
-          child: Column(
-            spacing: 16,
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              BookPreview(
-                bookId: bookId,
-                titleInitial: book.data.title[0],
-                src: book.data.preview,
-                style: BookPreviewStyle.cover,
+        child: FutureBuilder(
+          future: context.read<BooksBloc>().bookLoad(bookId),
+          builder: (_, bookSnapshot) {
+            if (bookSnapshot.connectionState != ConnectionState.done) {
+              return const Loading();
+            }
+
+            final book = bookSnapshot.data!;
+            return SingleChildScrollView(
+              padding: const EdgeInsets.symmetric(
+                horizontal: 16,
+              ).copyWith(top: 1),
+              child: Column(
+                spacing: 16,
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  BookPreview(
+                    bookId: bookId,
+                    titleInitial: book.title[0],
+                    src: book.preview,
+                    style: BookPreviewStyle.cover,
+                  ),
+                  BookInfo(
+                    title: book.title,
+                    subtitle: book.subtitle,
+                    year: book.year,
+                    genres: book.genres,
+                  ),
+                  Text(
+                    "Описание",
+                    style: context.theme.textTheme.headlineMedium,
+                  ),
+                  Text(
+                    book.description ?? "У книги нет описания...",
+                    style: context.theme.textTheme.bodyLarge,
+                  ),
+                ],
               ),
-              BookInfo(
-                title: book.data.title,
-                subtitle: book.data.subtitle,
-                year: book.data.year,
-                genres: book.data.genres,
-              ),
-              Text("Описание", style: context.theme.textTheme.headlineMedium),
-              Text(
-                book.data.description ?? "У книги нет описания...",
-                style: context.theme.textTheme.bodyLarge,
-              ),
-            ],
-          ),
+            );
+          },
         ),
       ),
     );

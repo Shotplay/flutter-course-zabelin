@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_app/data/states/books_view_model.dart';
+import 'package:flutter_app/data/bloc/books_bloc.dart';
+import 'package:flutter_app/domain/entity/book.dart';
 import 'package:flutter_app/domain/validators/is_number_validator.dart';
 import 'package:flutter_app/domain/validators/not_empty_validator.dart';
 import 'package:flutter_app/domain/value_object/genre.dart';
@@ -8,7 +9,7 @@ import 'package:flutter_app/ui/theme/brand_colors.dart';
 import 'package:flutter_app/ui/widgets/form_input.dart';
 import 'package:flutter_app/ui/widgets/styled_back_button.dart';
 import 'package:flutter_app/utils/theme.dart';
-import 'package:provider/provider.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class BookAddScreen extends StatefulWidget {
   const BookAddScreen({super.key});
@@ -144,7 +145,7 @@ class _Form extends StatelessWidget {
           FormInput(
             title: "Год написания *",
             controller: yearController,
-            hint: Text("1890"),
+            hint: Text("1985"),
             validator: validateIsNumber,
           ),
           FormInput(
@@ -207,32 +208,25 @@ class _AddButton extends StatelessWidget {
             .map((g) => Genre(g))
             .toSet();
 
-        final success = await context.read<BooksViewModel>().addBook(
-          title: titleController.text,
-          subtitle: subtitleController.text,
-          year: int.parse(yearController.text),
-          genres: genres,
-          preview: previewController.text.isEmpty
-              ? null
-              : previewController.text,
-          description: descriptionController.text.isEmpty
-              ? null
-              : descriptionController.text,
-        );
-
-        _clear();
-
-        if (!context.mounted) return;
-
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text(
-              success
-                  ? "Успешно добавлена"
-                  : "Не удалось добавить, подождите немного...",
+        context.read<BooksBloc>().add(
+          BooksAddBookEvent(
+            Book(
+              id: DateTime.now().toUtc().microsecondsSinceEpoch.toString(),
+              title: titleController.text,
+              subtitle: subtitleController.text,
+              year: int.parse(yearController.text),
+              genres: genres,
+              preview: previewController.text.isEmpty
+                  ? null
+                  : previewController.text,
+              description: descriptionController.text.isEmpty
+                  ? null
+                  : descriptionController.text,
             ),
           ),
         );
+
+        _clear();
       },
       child: Text("Сохранить"),
     );

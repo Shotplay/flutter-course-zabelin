@@ -6,11 +6,11 @@ class CatalogRoute extends GoRouteData with $CatalogRoute {
   @override
   Widget build(BuildContext context, GoRouterState state) {
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      context.read<BooksViewModel>().load();
+      context.read<BooksBloc>().add(const BooksLoadEvent());
     });
 
-    return ChangeNotifierProvider(
-      create: (_) => CatalogUiState(),
+    return BlocProvider(
+      create: (_) => CatalogCubit(),
       child: const CatalogScreen(),
     );
   }

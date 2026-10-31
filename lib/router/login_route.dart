@@ -6,10 +6,9 @@ class LoginRoute extends GoRouteData with $LoginRoute {
 
   @override
   Widget build(BuildContext context, GoRouterState state) {
-    final userVM = context.read<UserViewModel>();
+    final authBloc = context.read<AuthBloc>();
 
-    if (userVM.state is UserUnauthorized &&
-        (userVM.state as UserUnauthorized).error != null) {
+    if (authBloc.state is AuthFailureState) {
       WidgetsBinding.instance.addPostFrameCallback(
         (_) => ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(

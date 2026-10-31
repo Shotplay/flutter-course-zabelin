@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_app/data/states/user_view_model.dart';
+import 'package:flutter_app/data/bloc/auth_bloc.dart';
 import 'package:flutter_app/domain/validators/email_validator.dart';
 import 'package:flutter_app/domain/validators/password_validator.dart';
 import 'package:flutter_app/router/app_router.dart';
@@ -7,7 +7,7 @@ import 'package:flutter_app/ui/widgets/error_banner.dart';
 import 'package:flutter_app/ui/widgets/form_input.dart';
 import 'package:flutter_app/ui/widgets/logo.dart';
 import 'package:flutter_app/utils/theme.dart';
-import 'package:provider/provider.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class RegisterScreen extends StatefulWidget {
   const RegisterScreen({super.key});
@@ -147,8 +147,13 @@ class _RegisterButton extends StatelessWidget {
         }
 
         setHasError(false);
-        final user = context.read<UserViewModel>();
-        await user.register(emailController.text, passwordController.text);
+        final authBloc = context.read<AuthBloc>();
+        authBloc.add(
+          AuthSignUpEvent(emailController.text, passwordController.text),
+        );
+
+        emailController.clear();
+        passwordController.clear();
       },
     );
   }

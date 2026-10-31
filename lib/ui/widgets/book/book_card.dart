@@ -6,7 +6,7 @@ import 'book_info.dart';
 import 'book_preview.dart';
 
 class BookCard extends StatelessWidget {
-  final BookItem book;
+  final Book book;
 
   const BookCard({super.key, required this.book});
 
@@ -27,15 +27,15 @@ class BookCard extends StatelessWidget {
             children: [
               BookPreview(
                 bookId: book.id,
-                titleInitial: book.data.title[0],
-                src: book.data.preview,
+                titleInitial: book.title[0],
+                src: book.preview,
               ),
               Expanded(
                 child: BookInfo(
-                  title: book.data.title,
-                  subtitle: book.data.subtitle,
-                  year: book.data.year,
-                  genres: book.data.genres,
+                  title: book.title,
+                  subtitle: book.subtitle,
+                  year: book.year,
+                  genres: book.genres,
                   titleMaxLines: 2,
                 ),
               ),

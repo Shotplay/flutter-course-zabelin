@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_app/data/states/user_view_model.dart';
+import 'package:flutter_app/data/bloc/auth_bloc.dart';
 import 'package:flutter_app/domain/validators/email_validator.dart';
 import 'package:flutter_app/router/app_router.dart';
 import 'package:flutter_app/ui/widgets/form_input.dart';
 import 'package:flutter_app/ui/widgets/logo.dart';
 import 'package:flutter_app/utils/theme.dart';
-import 'package:provider/provider.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -136,8 +136,13 @@ class _LoginButton extends StatelessWidget {
       onPressed: () async {
         if (!formKey.currentState!.validate()) return;
 
-        final user = context.read<UserViewModel>();
-        await user.login(emailController.text, passwordController.text);
+        final authBloc = context.read<AuthBloc>();
+        authBloc.add(
+          AuthSignInEvent(emailController.text, passwordController.text),
+        );
+
+        emailController.clear();
+        passwordController.clear();
       },
     );
   }

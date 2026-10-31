@@ -65,6 +65,22 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "9.2.1"
+  bloc_concurrency:
+    dependency: "direct main"
+    description:
+      name: bloc_concurrency
+      sha256: "86b7b17a0a78f77fca0d7c030632b59b593b22acea2d96972588f40d4ef53a94"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.3.0"
+  bloc_listenable:
+    dependency: "direct main"
+    description:
+      name: bloc_listenable
+      sha256: c23e07a075665feb09e18db2c227dc3c1afcb7e09b757192c2070a633558725f
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.0.0"
   boolean_selector:
     dependency: transitive
     description:
@@ -585,7 +601,7 @@ packages:
     source: hosted
     version: "1.5.3"
   provider:
-    dependency: "direct main"
+    dependency: transitive
     description:
       name: provider
       sha256: "4e82183fa20e5ca25703ead7e05de9e4cceed1fbd1eadc1ac3cb6f565a09f272"
@@ -701,6 +717,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.1.4"
+  stream_listenable:
+    dependency: transitive
+    description:
+      name: stream_listenable
+      sha256: dbe8c3ceed7e359a2e43609505129fe5c257b893058e9b963463249880dd2b9b
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.0.0"
   stream_transform:
     dependency: transitive
     description:
