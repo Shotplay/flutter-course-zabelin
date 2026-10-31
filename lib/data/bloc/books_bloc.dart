@@ -44,7 +44,7 @@ class BooksBloc extends Bloc<BooksEvent, BooksState> {
     BooksRefreshEvent event,
     Emitter<BooksState> emit,
   ) async {
-    emit(BooksLoadingState());
+    emit(const BooksLoadingState());
     try {
       emit(BooksLoadedState(await booksFetch()));
     } on Object catch (e) {
