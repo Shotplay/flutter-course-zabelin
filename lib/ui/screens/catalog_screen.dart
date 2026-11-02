@@ -33,8 +33,8 @@ class _BooksContent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final booksBloc = context.watch<BooksBloc>();
-    final userBloc = context.watch<UserBloc>();
+    final booksBloc = context.read<BooksBloc>();
+    final userBloc = context.read<UserBloc>();
 
     return switch ((booksBloc.state, userBloc.state)) {
       (BooksLoadedState(:final books), UserLoadedState(:final user)) =>

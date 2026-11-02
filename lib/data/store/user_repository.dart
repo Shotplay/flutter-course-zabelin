@@ -18,8 +18,8 @@ class UserFirebaseRepository implements UserRepository {
   @override
   Future<User> createUser(User user) async {
     await _usersRef.doc(user.id).set(user.toJson());
-    _cache[user.id] = User.zero;
-    return getUser(user.id);
+    _cache[user.id] = user;
+    return user;
   }
 
   @override

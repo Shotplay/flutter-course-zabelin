@@ -79,7 +79,6 @@ class UserBloc extends Bloc<UserEvent, UserState> {
     try {
       emit(UserLoadedState(await userLoad(event.id)));
     } on Object catch (e) {
-      print(e.toString());
       emit(UserFailureState(e));
     }
   }
