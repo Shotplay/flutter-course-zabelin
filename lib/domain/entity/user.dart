@@ -8,7 +8,6 @@ part 'user.g.dart';
 
 abstract class UserRepository {
   Future<User> getUser(String id);
-  Future<User> createUser(User user);
   Future<bool> saveUser(User user);
   Future<User> fetchUser(String id);
 }

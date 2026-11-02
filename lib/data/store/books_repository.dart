@@ -39,7 +39,9 @@ class BooksFirebaseRepository implements BooksRepository {
 
   @override
   Future<BooksMap> fetchBooks() async {
-    final snapshot = await _booksRef.get();
+    final snapshot = await _booksRef.get(
+      const GetOptions(source: Source.server),
+    );
 
     if (snapshot.docs.isEmpty) return UnmodifiableMapView({}) as BooksMap;
 

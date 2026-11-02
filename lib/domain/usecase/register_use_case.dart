@@ -11,9 +11,13 @@ class RegisterUseCase {
   Future<User> call({required String email, required String password}) async {
     final normalizedPass = password.trim();
 
-    await authRepo.signUp(email.toEmail(), normalizedPass);
-    return await userRepo.createUser(
-      User(id: authRepo.userId!, email: email.toEmail(), likes: {}),
-    );
+    await Future.wait([
+      authRepo.signUp(email.toEmail(), normalizedPass),
+      userRepo.saveUser(
+        User(id: authRepo.userId!, email: email.toEmail(), likes: {}),
+      ),
+    ]);
+
+    return userRepo.getUser(authRepo.userId!);
   }
 }
