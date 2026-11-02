@@ -22,7 +22,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
-
   FirebaseFirestore.instance.settings = Settings(persistenceEnabled: false);
 
   runApp(const App());
