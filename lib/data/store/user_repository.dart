@@ -16,10 +16,10 @@ class UserFirebaseRepository implements UserRepository {
   }
 
   @override
-  Future<User> createUser(String id) async {
-    await _usersRef.doc(id).set(User.zero.toJson());
-    _cache[id] = User.zero;
-    return getUser(id);
+  Future<User> createUser(User user) async {
+    await _usersRef.doc(user.id).set(user.toJson());
+    _cache[user.id] = User.zero;
+    return getUser(user.id);
   }
 
   @override

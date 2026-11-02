@@ -12,6 +12,9 @@ class RegisterUseCase {
     final normalizedPass = password.trim();
 
     await authRepo.signUp(email.toEmail(), normalizedPass);
-    return await userRepo.createUser(authRepo.userId!);
+
+    return await userRepo.createUser(
+      User(id: authRepo.userId!, email: email.toEmail(), likes: {}),
+    );
   }
 }
